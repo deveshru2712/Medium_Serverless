@@ -12,10 +12,12 @@
   "dependencies": {
     "@deveshru2712/medium_common": "^1.5.0",
     "@tailwindcss/vite": "^4.1.3",
+    "axios": "^1.8.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.0",
-    "tailwindcss": "^4.1.3"
+    "tailwindcss": "^4.1.3",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

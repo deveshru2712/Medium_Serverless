@@ -46,7 +46,6 @@ authRouter.post("/signup", async (c) => {
     console.log("user created");
 
     const token = await sign({ id: (await newUser).id }, c.env.JWT_SECRET);
-    console.log(token);
 
     return c.json({ key: token });
   } catch (error) {

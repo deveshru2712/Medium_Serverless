@@ -1,10 +1,11 @@
 import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { SignInType } from "@deveshru2712/medium_common";
 
 import LabelledInput from "../components/LabelledInput";
 import Quote from "../components/Quote";
+import { authStore } from "../store/authStore";
 
 const LoginPage = () => {
   const [form, setForm] = useState<SignInType>({
@@ -12,13 +13,19 @@ const LoginPage = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
+  const { logIn } = authStore();
+
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const onSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(form);
+
+    logIn(form);
+
+    navigate("/");
   };
 
   return (
@@ -31,7 +38,7 @@ const LoginPage = () => {
             </h2>
             <span className="text-lg font-semibold text-slate-500">
               Don't have an account?
-              <Link to={"/signup"} className="underline">
+              <Link to={"/signup"} className="pl-2 underline">
                 signup
               </Link>
             </span>
@@ -65,7 +72,7 @@ const LoginPage = () => {
             </form>
           </div>
         </div>
-        <div className="flex flex-1 h-full  justify-center items-center">
+        <div className="hidden md:flex flex-1 h-full  justify-center items-center">
           <Quote
             author="yash chandra"
             quote="I did'nt do it cause it was easy but i did it cause i thought it was easy."
