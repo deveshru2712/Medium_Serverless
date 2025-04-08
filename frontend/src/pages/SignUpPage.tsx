@@ -1,8 +1,26 @@
-import React from "react";
-import Quote from "../components/Quote";
+import { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { SignUpType } from "@deveshru2712/medium_common";
+
+import Quote from "../components/Quote";
+import LabelledInput from "../components/LabelledInput";
+
 const SignUpPage = () => {
+  const [form, setForm] = useState<SignUpType>({
+    email: "",
+    password: "",
+    name: "",
+  });
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const onSubmitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(form);
+  };
   return (
     <div className="bg-slate-200">
       <div className="w-screen h-screen flex flex-col md:flex-row">
@@ -18,42 +36,34 @@ const SignUpPage = () => {
               </Link>
             </span>
 
-            <form className="w-full flex flex-col justify-center items-center gap-2">
-              <div className="w-full">
-                <label htmlFor="username" className="text-xl font-semibold ">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  id="username"
-                  placeholder="Enter your username"
-                  className="w-full border-2 px-2 py-1 rounded-md mt-2 outline-none"
-                />
-              </div>
+            <form
+              onSubmit={onSubmitHandler}
+              className="w-full flex flex-col justify-center items-center gap-2"
+            >
+              <LabelledInput
+                label="Username"
+                name="name"
+                type="text"
+                onchange={onChangeHandler}
+                placeholder="Enter your username"
+              />
 
-              <div className="w-full">
-                <label htmlFor="email" className="text-xl font-semibold">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="you@mail.com"
-                  className="w-full border-2 px-2 py-1 rounded-md mt-2 outline-none"
-                />
-              </div>
+              <LabelledInput
+                label="Email"
+                type="email"
+                name="email"
+                onchange={onChangeHandler}
+                placeholder="your@mail.com"
+              />
 
-              <div className="w-full">
-                <label htmlFor="password" className="text-xl font-semibold">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  placeholder="......"
-                  className="w-full border-2 px-2 py-1 rounded-md mt-2 outline-none"
-                />
-              </div>
+              <LabelledInput
+                label="password"
+                type="password"
+                name="password"
+                onchange={onChangeHandler}
+                placeholder="......"
+              />
+
               <button
                 type="submit"
                 className="w-full py-2 bg-black text-lg font-semibold text-white rounded-md cursor-pointer active:scale-105 duration-300"
