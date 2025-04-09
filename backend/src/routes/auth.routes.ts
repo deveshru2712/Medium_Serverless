@@ -4,7 +4,12 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 
 import { sign, verify } from "hono/jwt";
 
-import { SignInInput, SignUpInput } from "@deveshru2712/medium_common";
+import {
+  SignInInput,
+  SignInType,
+  SignUpInput,
+  SignUpType,
+} from "@deveshru2712/medium_common";
 
 interface Env {
   DATABASE_URL: string;
@@ -37,6 +42,8 @@ authRouter.get("/me", async (c) => {
       id: true,
       email: true,
       name: true,
+      bio: true,
+      profileImg: true,
     },
   });
 
@@ -51,7 +58,7 @@ authRouter.post("/signup", async (c) => {
   }).$extends(withAccelerate());
 
   // parsing the body
-  const body = await c.req.json();
+  const body: SignUpType = await c.req.json();
 
   const { success, error } = SignUpInput.safeParse(body);
 
@@ -72,11 +79,15 @@ authRouter.post("/signup", async (c) => {
         email: body.email,
         password: body.password,
         name: body.name,
+        bio: body.bio,
+        profileImg: body.profileImg,
       },
       select: {
         id: true,
         email: true,
         name: true,
+        bio: true,
+        profileImg: true,
       },
     });
 
@@ -101,7 +112,7 @@ authRouter.post("/signin", async (c) => {
 
   // parsing the body
 
-  const body = await c.req.json();
+  const body: SignInType = await c.req.json();
 
   const { success, error } = SignInInput.safeParse(body);
   if (!success) {
@@ -116,6 +127,8 @@ authRouter.post("/signin", async (c) => {
         id: true,
         email: true,
         name: true,
+        bio: true,
+        profileImg: true,
       },
     });
     if (!user) {

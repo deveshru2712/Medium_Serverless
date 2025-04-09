@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { verify } from "hono/jwt";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { CreateBlogType, UpdateBlogType } from "@deveshru2712/medium_common";
 
 interface Env {
   DATABASE_URL: string;
@@ -52,7 +53,7 @@ blogRoutes.post("/", async (c) => {
   const userId = c.get("userId");
 
   // parsing the body
-  const body = await c.req.json();
+  const body: CreateBlogType = await c.req.json();
   try {
     const blog = await prisma.post.create({
       data: { title: body.title, content: body.content, authorId: userId },
@@ -67,6 +68,7 @@ blogRoutes.post("/", async (c) => {
   }
 });
 
+// updating the blog
 blogRoutes.put("/", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -75,7 +77,7 @@ blogRoutes.put("/", async (c) => {
   const userId = c.get("userId");
 
   // parsing the body
-  const body = await c.req.json();
+  const body: UpdateBlogType = await c.req.json();
 
   try {
     const blog = await prisma.post.update({
@@ -95,6 +97,7 @@ blogRoutes.put("/", async (c) => {
   }
 });
 
+// fetching the blog
 blogRoutes.get("/", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -113,6 +116,8 @@ blogRoutes.get("/", async (c) => {
         author: {
           select: {
             name: true,
+            bio: true,
+            profileImg: true,
           },
         },
       },
