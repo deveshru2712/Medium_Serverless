@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { SignUpType } from "@deveshru2712/medium_common";
 
@@ -14,7 +14,6 @@ const SignUpPage = () => {
     name: "",
   });
 
-  const navigate = useNavigate();
   const { signUp } = authStore();
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,8 +24,6 @@ const SignUpPage = () => {
     e.preventDefault();
 
     signUp(form);
-
-    navigate("/");
   };
   return (
     <div className="bg-slate-200">

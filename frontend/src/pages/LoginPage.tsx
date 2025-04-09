@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { SignInType } from "@deveshru2712/medium_common";
 
@@ -13,7 +13,6 @@ const LoginPage = () => {
     password: "",
   });
 
-  const navigate = useNavigate();
   const { logIn } = authStore();
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,8 +23,6 @@ const LoginPage = () => {
     e.preventDefault();
 
     logIn(form);
-
-    navigate("/");
   };
 
   return (
