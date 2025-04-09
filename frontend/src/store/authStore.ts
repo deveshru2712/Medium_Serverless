@@ -5,8 +5,10 @@ import { create } from "zustand";
 
 interface UserType {
   id: string;
-  name: string;
   email: string;
+  name: string;
+  bio: string;
+  profileImg: string;
 }
 
 interface authStoreTypes {
