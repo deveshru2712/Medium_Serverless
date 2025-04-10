@@ -68,13 +68,13 @@ authRouter.post("/signup", async (c) => {
   }
 
   try {
-    const user = prisma.user.findUnique({ where: { email: body.email } });
-    if (!user) {
+    const user = await prisma.user.findUnique({ where: { email: body.email } });
+    if (user) {
       c.status(409);
       return c.text("email is already associated with another account");
     }
 
-    const newUser = prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         email: body.email,
         password: body.password,

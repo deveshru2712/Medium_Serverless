@@ -4,10 +4,10 @@ import { Toaster } from "react-hot-toast";
 
 import { authStore } from "./store/authStore";
 
-import Blog from "./pages/Blog";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import Loader from "./components/Loader";
+import MainPage from "./pages/MainPage";
 
 const App = () => {
   const { User, authCheck, isLoading } = authStore();
@@ -30,7 +30,7 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={User ? <Blog /> : <Navigate to={"/login"} />}
+          element={User ? <MainPage /> : <Navigate to={"/login"} />}
         />
         <Route
           path="/signup"

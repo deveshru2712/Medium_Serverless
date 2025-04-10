@@ -57,6 +57,13 @@ blogRoutes.post("/", async (c) => {
   try {
     const blog = await prisma.post.create({
       data: { title: body.title, content: body.content, authorId: userId },
+      select: {
+        author: true,
+        content: true,
+        createdAt: true,
+        title: true,
+        id: true,
+      },
     });
 
     c.status(201);
@@ -113,6 +120,7 @@ blogRoutes.get("/", async (c) => {
         content: true,
         id: true,
         published: true,
+        createdAt: true,
         author: {
           select: {
             name: true,
@@ -123,7 +131,7 @@ blogRoutes.get("/", async (c) => {
       },
     });
 
-    return c.json(blog);
+    return c.json({ blog });
   } catch (error) {
     c.status(500);
     console.log(error);

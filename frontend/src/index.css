@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "segoeu-light";
+  src: url("./assets/fonts/segoeuithis.ttf");
+}
+
+@font-face {
+  font-family: "segoeu-heavy";
+  src: url("./assets/fonts/segoeuithibd.ttf");
+}
+
+@theme {
+  --font-segoeu-light: "segoeu-light";
+  --font-segoeu-heavy: "segoeu-heavy";
+}
