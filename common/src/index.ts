@@ -32,6 +32,7 @@ export const SignInInput = z.object({
 export const CreateBlogInput = z.object({
   title: z.string(),
   content: z.string(),
+  titleImg: z.string(),
   published: z.boolean(),
 });
 
@@ -39,7 +40,9 @@ export const UpdateBlogInput = z
   .object({
     id: z.string(),
     title: z.string().optional(),
+    titleImg: z.string().optional(),
     content: z.string().optional(),
+    published: z.boolean().optional(),
   })
   .refine((data) => data.title !== undefined || data.content !== undefined, {
     message: "At least one field (title or content) must be provided",
