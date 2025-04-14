@@ -31,7 +31,10 @@ const MainPage = () => {
           ) : (
             <>
               {BlogList?.map((blog) => (
-                <div key={blog.id} className="px-4">
+                <div
+                  key={blog.id}
+                  className="flex flex-col justify-center items-center gap-3 px-4"
+                >
                   <Card
                     title={blog.title}
                     content={blog.content}

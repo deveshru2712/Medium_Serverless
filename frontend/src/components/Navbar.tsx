@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Bell, NotebookPen, Search, User } from "lucide-react";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <nav className="w-full h-16 py-4 border-b shadow-md">
       <div className="h-full px-4 flex justify-between items-center">
@@ -30,7 +31,10 @@ const Navbar = () => {
         </div>
 
         <div className="flex justify-between items-center gap-8">
-          <button className="hidden md:flex cursor-pointer">
+          <button
+            className="hidden md:flex cursor-pointer"
+            onClick={() => navigate("/create")}
+          >
             <NotebookPen />
             Write
           </button>
