@@ -1,12 +1,13 @@
 import axios from "axios";
 import { create } from "zustand";
 
-interface Blog {
+export interface Blog {
   id: string;
   title: string;
   content: string;
   published: boolean;
   createdAt: Date;
+  titleImg: string;
   author: {
     name: string | null;
     profileImg: string | null;

@@ -44,7 +44,6 @@ export const authStore = create<authStoreTypes>((set) => ({
     try {
       const response = await axios.post(`/api/auth/signin`, credentials);
       const token = response.data.key;
-
       // setting the the jwt token in localstorage
 
       localStorage.setItem("token", token);
