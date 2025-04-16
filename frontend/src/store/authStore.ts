@@ -1,4 +1,8 @@
-import { SignInType, SignUpType } from "@deveshru2712/medium_common";
+import {
+  SignInType,
+  SignUpType,
+  UpdateUserType,
+} from "@deveshru2712/medium_common";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { create } from "zustand";
@@ -16,6 +20,7 @@ interface authStoreTypes {
   isLoading: boolean;
   signUp: (credentials: SignUpType) => void;
   logIn: (credentials: SignInType) => void;
+  update: (credentials: UpdateUserType) => void;
   authCheck: () => void;
 }
 
@@ -36,7 +41,11 @@ export const authStore = create<authStoreTypes>((set) => ({
     } catch (error) {
       console.log(error);
       set({ User: null, isLoading: false });
-      toast.error("Error occurred while creating an account");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Error occurred while creating an account"
+      );
     }
   },
   logIn: async (credentials) => {
@@ -52,7 +61,24 @@ export const authStore = create<authStoreTypes>((set) => ({
     } catch (error) {
       console.log(error);
       set({ isLoading: false });
-      toast.error("Error occurred while login");
+      toast.error(
+        error instanceof Error ? error.message : "An error occurred while login"
+      );
+    }
+  },
+  update: async (credentials) => {
+    set({ isLoading: true });
+    try {
+      const response = await axios.put(`/api/auth/update`, credentials);
+      set({ User: response.data.updatedUser, isLoading: false });
+    } catch (error) {
+      console.log(error);
+      set({ isLoading: false });
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "An error occurred while updating"
+      );
     }
   },
   authCheck: async () => {
