@@ -11,9 +11,7 @@ export const SignUpInput = z.object({
       required_error: "password is required",
     })
     .min(6, { message: "password should be of at least 6 character" }),
-  name: z.string().optional(),
-  bio: z.string().optional(),
-  profileImg: z.string().optional(),
+  name: z.string(),
 });
 
 export const SignInInput = z.object({
@@ -29,10 +27,27 @@ export const SignInInput = z.object({
     .min(6, { message: "password should be of at least 6 character" }),
 });
 
+export const UpdateUser = z.object({
+  email: z
+    .string()
+    .email({ message: "please provide a valid email" })
+    .optional(),
+  password: z
+    .string()
+    .min(6, { message: "password should be of at least 6 character" })
+    .optional(),
+  name: z.string().optional(),
+  bio: z.string().optional(),
+
+  // profileImg: z.string().optional(),
+
+  profileImg: z.instanceof(File).optional(),
+});
+
 export const CreateBlogInput = z.object({
   title: z.string(),
   content: z.string(),
-  titleImg: z.string(),
+  titleImg: z.instanceof(File).optional(),
   published: z.boolean(),
 });
 
@@ -40,7 +55,7 @@ export const UpdateBlogInput = z
   .object({
     id: z.string(),
     title: z.string().optional(),
-    titleImg: z.string().optional(),
+    titleImg: z.instanceof(File).optional(),
     content: z.string().optional(),
     published: z.boolean().optional(),
   })
@@ -48,13 +63,9 @@ export const UpdateBlogInput = z
     message: "At least one field (title or content) must be provided",
   });
 
-// export const UpdateBlogInput = z.object({
-//   title: z.string().optional(),
-//   content: z.string().optional(),
-// });
-
 export type SignUpType = z.infer<typeof SignUpInput>;
 export type SignInType = z.infer<typeof SignInInput>;
+export type UpdateUserType = z.infer<typeof UpdateUser>;
 
 export type CreateBlogType = z.infer<typeof CreateBlogInput>;
 export type UpdateBlogType = z.infer<typeof UpdateBlogInput>;
