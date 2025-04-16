@@ -27,22 +27,35 @@ export const SignInInput = z.object({
     .min(6, { message: "password should be of at least 6 character" }),
 });
 
-export const UpdateUser = z.object({
-  email: z
-    .string()
-    .email({ message: "please provide a valid email" })
-    .optional(),
-  password: z
-    .string()
-    .min(6, { message: "password should be of at least 6 character" })
-    .optional(),
-  name: z.string().optional(),
-  bio: z.string().optional(),
-
-  // profileImg: z.string().optional(),
-
-  profileImg: z.instanceof(File).optional(),
-});
+export const UpdateUser = z
+  .object({
+    email: z
+      .string()
+      .email({ message: "please provide a valid email" })
+      .optional(),
+    password: z
+      .string()
+      .min(6, { message: "password should be of at least 6 character" })
+      .optional(),
+    name: z.string().optional(),
+    bio: z.string().optional(),
+    profileImg: z.instanceof(File).optional(),
+  })
+  .refine(
+    (data) => {
+      return (
+        data.email !== undefined ||
+        data.password !== undefined ||
+        data.name !== undefined ||
+        data.bio !== undefined ||
+        data.profileImg !== undefined
+      );
+    },
+    {
+      message: "At least one field must be provided for update",
+      path: [],
+    }
+  );
 
 export const CreateBlogInput = z.object({
   title: z.string(),

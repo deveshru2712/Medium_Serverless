@@ -2,6 +2,8 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
+import { v2 as cloudinary } from "cloudinary";
+
 import { sign, verify } from "hono/jwt";
 
 import {
@@ -9,11 +11,17 @@ import {
   SignInType,
   SignUpInput,
   SignUpType,
+  UpdateUser,
+  UpdateUserType,
 } from "@deveshru2712/medium_common";
+import { encodeBase64 } from "hono/utils/encode";
 
 interface Env {
   DATABASE_URL: string;
   JWT_SECRET: string;
+  Cloudinary_Cloud_Name: string;
+  Cloudinary_Api_key: string;
+  Cloudinary_Api_Secret: string;
 }
 
 const authRouter = new Hono<{ Bindings: Env }>();
@@ -64,14 +72,20 @@ authRouter.post("/signup", async (c) => {
 
   if (!success) {
     c.status(400);
-    return c.text(error.message);
+    return c.json({
+      success: false,
+      message: error.message,
+    });
   }
 
   try {
     const user = await prisma.user.findUnique({ where: { email: body.email } });
     if (user) {
       c.status(409);
-      return c.text("email is already associated with another account");
+      return c.json({
+        success: false,
+        message: "email is already associated with another account",
+      });
     }
 
     const newUser = await prisma.user.create({
@@ -79,21 +93,19 @@ authRouter.post("/signup", async (c) => {
         email: body.email,
         password: body.password,
         name: body.name,
-        bio: body.bio,
-        profileImg: body.profileImg,
       },
       select: {
         id: true,
         email: true,
         name: true,
-        bio: true,
-        profileImg: true,
       },
     });
 
-    const token = await sign({ id: (await newUser).id }, c.env.JWT_SECRET);
+    // creating a token
+    const token = await sign({ id: newUser.id }, c.env.JWT_SECRET);
 
     return c.json({
+      success: true,
       key: token,
       user: newUser,
       message: "Account created successfully",
@@ -101,7 +113,13 @@ authRouter.post("/signup", async (c) => {
   } catch (error) {
     console.log(error);
     c.status(500);
-    return c.text("An error occurred while creating an account.");
+    return c.json({
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "An error occurred while creating an account.",
+    });
   }
 });
 
@@ -117,7 +135,10 @@ authRouter.post("/signin", async (c) => {
   const { success, error } = SignInInput.safeParse(body);
   if (!success) {
     c.status(400);
-    return c.text(error.message);
+    return c.json({
+      success: false,
+      message: error.message,
+    });
   }
 
   try {
@@ -133,17 +154,131 @@ authRouter.post("/signin", async (c) => {
     });
     if (!user) {
       c.status(401);
-      return c.text("Wrong credentials");
+      return c.json({
+        success: false,
+        message: "Wrong credentials",
+      });
     }
 
     const token = await sign({ id: user.id }, c.env.JWT_SECRET);
     return c.json({
+      success: true,
       key: token,
       user: user,
       message: "Logged in successfully",
     });
   } catch (error) {
+    console.log(error);
     c.status(500);
+    return c.json({
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "An error occurred while login into the account.",
+    });
+  }
+});
+
+authRouter.put("/update", async (c) => {
+  cloudinary.config({
+    cloud_name: c.env.Cloudinary_Cloud_Name,
+    api_key: c.env.Cloudinary_Api_key,
+    api_secret: c.env.Cloudinary_Api_Secret,
+  });
+
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  // Authenticate user
+  const header = c.req.header("Authorization") || "";
+  const token = header.split(" ")[1];
+  if (!token) {
+    c.status(401);
+    return c.json({
+      success: false,
+      message: "Unable to update the user profile: Authorization error",
+    });
+  }
+
+  try {
+    // Verify token
+    const response = await verify(token, c.env.JWT_SECRET);
+    const userId = String(response.id);
+
+    // Parse and validate request body
+    const body: UpdateUserType = await c.req.json();
+    const { success, error } = UpdateUser.safeParse(body);
+    if (!success) {
+      c.status(400);
+      return c.json({
+        success: false,
+        message: "Invalid request data",
+        error: error.message,
+      });
+    }
+
+    // Prepare update data
+    const updateData: {
+      name: string | undefined;
+      email: string | undefined;
+      password: string | undefined;
+      bio: string | undefined;
+      profileImg?: string;
+    } = {
+      name: body.name,
+      email: body.email,
+      password: body.password,
+      bio: body.bio,
+    };
+
+    // Handle profile image upload if provided
+    if (body.profileImg) {
+      try {
+        const byteArrayBuffer = await body.profileImg.arrayBuffer();
+        const base64 = encodeBase64(byteArrayBuffer);
+        const result = await cloudinary.uploader.upload(`${base64}`);
+        // data:image/png;base64,
+        updateData.profileImg = result.secure_url;
+      } catch (imageError) {
+        console.log("Image upload failed:", imageError);
+        c.status(400);
+        return c.json({
+          success: false,
+          message: "Failed to upload profile image",
+          error:
+            imageError instanceof Error ? imageError.message : "Unknown error",
+        });
+      }
+    }
+
+    // Update user in database
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    // Return success response
+    return c.json({
+      success: true,
+      message: "User profile updated successfully",
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        bio: updatedUser.bio,
+        profileImg: updatedUser.profileImg,
+      },
+    });
+  } catch (error) {
+    console.log("Update user error:", error);
+    c.status(500);
+    return c.json({
+      success: false,
+      message: "Failed to update user profile",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 });
 
