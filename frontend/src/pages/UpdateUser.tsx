@@ -13,7 +13,7 @@ const UpdateUser = () => {
     name: User?.name || "",
     email: User?.email || "",
     bio: User?.bio || "",
-    password: User?.password || "",
+    password: "",
     profileImg: User?.profileImg || "",
   });
 
@@ -49,7 +49,7 @@ const UpdateUser = () => {
         setImage(result);
         setForm({ ...form, profileImg: result });
       };
-      reader.readAsDataURL(file); // This was missing - needed to actually read the file
+      reader.readAsDataURL(file);
     }
   };
 
