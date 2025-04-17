@@ -11,6 +11,7 @@ interface UserType {
   id: string;
   email: string;
   name: string;
+  password: string;
   bio: string;
   profileImg: string;
 }

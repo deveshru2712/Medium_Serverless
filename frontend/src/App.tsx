@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import Loader from "./components/Loader";
 import MainPage from "./pages/MainPage";
 import CreateBlog from "./pages/CreateBlog";
+import UpdateUser from "./pages/UpdateUser";
 
 const App = () => {
   const { User, authCheck, isLoading } = authStore();
@@ -32,6 +33,11 @@ const App = () => {
         <Route
           path="/"
           element={User ? <MainPage /> : <Navigate to={"/login"} />}
+        />
+
+        <Route
+          path="/update"
+          element={User ? <UpdateUser /> : <Navigate to={"/login"} />}
         />
 
         <Route

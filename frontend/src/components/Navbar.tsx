@@ -43,7 +43,10 @@ const Navbar = () => {
             <Bell />
           </button>
 
-          <button className="cursor-pointer">
+          <button
+            className="cursor-pointer"
+            onClick={() => navigate("/update")}
+          >
             <User />
           </button>
         </div>
