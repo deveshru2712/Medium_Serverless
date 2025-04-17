@@ -69,8 +69,10 @@ export const authStore = create<authStoreTypes>((set) => ({
   update: async (credentials) => {
     set({ isLoading: true });
     try {
-      const response = await axios.put(`/api/auth/update`, credentials);
-      set({ User: response.data.updatedUser, isLoading: false });
+      const response = await axios.put(`/api/auth/update`, credentials, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      set({ User: response.data.user, isLoading: false });
     } catch (error) {
       console.log(error);
       set({ isLoading: false });

@@ -2,8 +2,6 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
-import { v2 as cloudinary } from "cloudinary";
-
 import { sign, verify } from "hono/jwt";
 
 import {
@@ -14,7 +12,6 @@ import {
   UpdateUser,
   UpdateUserType,
 } from "@deveshru2712/medium_common";
-import { encodeBase64 } from "hono/utils/encode";
 
 interface Env {
   DATABASE_URL: string;
@@ -181,12 +178,6 @@ authRouter.post("/signin", async (c) => {
 });
 
 authRouter.put("/update", async (c) => {
-  cloudinary.config({
-    cloud_name: c.env.Cloudinary_Cloud_Name,
-    api_key: c.env.Cloudinary_Api_key,
-    api_secret: c.env.Cloudinary_Api_Secret,
-  });
-
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -209,6 +200,7 @@ authRouter.put("/update", async (c) => {
 
     // Parse and validate request body
     const body: UpdateUserType = await c.req.json();
+
     const { success, error } = UpdateUser.safeParse(body);
     if (!success) {
       c.status(400);
@@ -223,7 +215,7 @@ authRouter.put("/update", async (c) => {
     const updateData: {
       name: string | undefined;
       email: string | undefined;
-      password: string | undefined;
+      password?: string | undefined;
       bio: string | undefined;
       profileImg?: string;
     } = {
@@ -233,14 +225,39 @@ authRouter.put("/update", async (c) => {
       bio: body.bio,
     };
 
-    // Handle profile image upload if provided
-    if (body.profileImg) {
+    if (body.profileImg && body.profileImg.startsWith("data:")) {
       try {
-        const byteArrayBuffer = await body.profileImg.arrayBuffer();
-        const base64 = encodeBase64(byteArrayBuffer);
-        const result = await cloudinary.uploader.upload(`${base64}`);
-        // data:image/png;base64,
-        updateData.profileImg = result.secure_url;
+        const formData = new FormData();
+
+        formData.append("file", body.profileImg);
+        formData.append("upload_preset", "medium");
+
+        const uploadResponse = await fetch(
+          `https://api.cloudinary.com/v1_1/${c.env.Cloudinary_Cloud_Name}/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!uploadResponse.ok) {
+          throw new Error(
+            `Upload failed with status: ${uploadResponse.status}`
+          );
+        }
+
+        interface CloudinaryUploadResponse {
+          secure_url: string;
+          // Add other properties you might need from the response
+          public_id?: string;
+          url?: string;
+          asset_id?: string;
+        }
+
+        const uploadResult: CloudinaryUploadResponse =
+          await uploadResponse.json();
+
+        updateData.profileImg = uploadResult.secure_url;
       } catch (imageError) {
         console.log("Image upload failed:", imageError);
         c.status(400);
@@ -251,15 +268,25 @@ authRouter.put("/update", async (c) => {
             imageError instanceof Error ? imageError.message : "Unknown error",
         });
       }
+    } else if (body.profileImg) {
+      updateData.profileImg = body.profileImg;
     }
 
-    // Update user in database
+    if (body.password && body.password.trim().length > 6) {
+      updateData.password = body.password;
+    } else if (body.password) {
+      c.status(400);
+      return c.json({
+        success: false,
+        message: "Password must be at least 6 characters",
+      });
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: updateData,
     });
 
-    // Return success response
     return c.json({
       success: true,
       message: "User profile updated successfully",

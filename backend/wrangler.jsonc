@@ -3,12 +3,13 @@
   "name": "backend",
   "main": "src/index.ts",
   "compatibility_date": "2025-04-06",
-  // "compatibility_flags": [
-  //   "nodejs_compat"
-  // ],
+  "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "DATABASE_URL": "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNjQ3YTg5NGItYjNjZS00MWIzLThlYWEtYzU0NWM0NWRhZjg2IiwidGVuYW50X2lkIjoiMGQ1Zjk3YWU1YzYzZjE2NDljNmJkZTMxY2M4OGU3MGVhNDQ0YWQ5Nzc3OTM0MzhmZTNmZDA1MWI5NDY4MDNhYSIsImludGVybmFsX3NlY3JldCI6Ijc2NjhlNjdiLTA5M2MtNDFjMC1iMmYzLWYyMDVmOWE0ZjJlMCJ9.LbGMkL9mUNq6ehI1GmX-Pq5ffTmxjNZX2KV04VLZllc",
-    "JWT_SECRET": "9FAHEA8o3Ol4Gd09YxtIFGjUrjFC1HRFvdk2Pr88sEE="
+    "JWT_SECRET": "9FAHEA8o3Ol4Gd09YxtIFGjUrjFC1HRFvdk2Pr88sEE=",
+    "Cloudinary_Cloud_Name": "duolkqhlw",
+    "Cloudinary_Api_key": "462867942947517",
+    "Cloudinary_Api_Secret": "nwjS2eNsrAYFdzdIjZdn5mj2JF8"
   }
   // "kv_namespaces": [
   //   {

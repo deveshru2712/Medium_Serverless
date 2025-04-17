@@ -5,7 +5,7 @@ import { UpdateUserType } from "@deveshru2712/medium_common";
 import { Pencil } from "lucide-react";
 
 const UpdateUser = () => {
-  const { User } = authStore();
+  const { User, update } = authStore();
 
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -13,7 +13,7 @@ const UpdateUser = () => {
     name: User?.name || "",
     email: User?.email || "",
     bio: User?.bio || "",
-    password: "",
+    password: undefined,
     profileImg: User?.profileImg || "",
   });
 
@@ -32,6 +32,7 @@ const UpdateUser = () => {
   const onSubmitHandler = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(form);
+    update(form);
   };
 
   const handleImageClick = () => {
@@ -68,6 +69,7 @@ const UpdateUser = () => {
           <input
             type="file"
             hidden
+            id="image_Updater"
             accept="image/*"
             ref={imageRef}
             onChange={handleImageChange}

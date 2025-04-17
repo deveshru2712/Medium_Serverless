@@ -33,8 +33,6 @@ blogRoutes.use("/*", async (c, next) => {
 
   const response = await verify(token, c.env.JWT_SECRET);
 
-  console.log(response);
-
   if (response.id) {
     c.set("userId", String(response.id));
     await next();
