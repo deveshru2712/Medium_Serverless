@@ -60,7 +60,7 @@ export const UpdateUser = z
 export const CreateBlogInput = z.object({
   title: z.string(),
   content: z.string(),
-  titleImg: z.string().optional(),
+  titleImg: z.string(),
   published: z.boolean(),
 });
 
