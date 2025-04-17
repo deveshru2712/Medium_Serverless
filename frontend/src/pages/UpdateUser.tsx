@@ -57,8 +57,8 @@ const UpdateUser = () => {
   return (
     <div>
       <Navbar />
-      <div className="max-w-7xl mx-auto flex justify-center items-center gap-5">
-        <div className="size-64 relative">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-center items-center gap-5">
+        <div className="size-48 md:size-64 mt-20 relative">
           <button
             className="cursor-pointer absolute right-0 top-0 z-10 bg-white rounded-full p-1 shadow-md"
             onClick={handleImageClick}
@@ -83,7 +83,7 @@ const UpdateUser = () => {
             />
           </div>
         </div>
-        <div className="w-1/2 mt-10">
+        <div className="w-full md:w-1/2 mt-0 md:mt-20">
           <form
             className="w-full flex flex-col px-10 py-5 gap-5"
             onSubmit={onSubmitHandler}

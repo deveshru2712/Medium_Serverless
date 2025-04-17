@@ -1,0 +1,84 @@
+/* editor-styles.css */
+.tiptap :first-child {
+  margin-top: 0;
+}
+
+.tiptap ul,
+.tiptap ol {
+  padding: 0 1rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+}
+
+.tiptap ul li p,
+.tiptap ol li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  line-height: 1.1;
+  margin-top: 2.5rem;
+  text-wrap: pretty;
+}
+
+.tiptap h1,
+.tiptap h2 {
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tiptap h1 {
+  font-size: 2rem;
+}
+
+.tiptap h2 {
+  font-size: 1.5rem;
+}
+
+.tiptap h3 {
+  font-size: 1rem;
+}
+
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  font-size: 0.7rem;
+}
+
+.tiptap img {
+  display: block;
+  height: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+}
+
+/* Continue with other selectors... */
+
+/* Target the image with maximum specificity */
+.tiptap .ProseMirror img,
+.tiptap img,
+.ProseMirror img,
+div[contenteditable="true"] img,
+[data-type="image"] img,
+.tiptap [data-type="image"] img {
+  display: block !important;
+  height: auto !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+  max-width: 100% !important;
+}
+
+/* Also target any figure or wrapper elements that might contain the image */
+.tiptap figure,
+.ProseMirror figure,
+[data-type="image"],
+.tiptap [data-type="image"] {
+  margin-top: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+}

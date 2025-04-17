@@ -70,11 +70,18 @@ blogRoutes.post("/", async (c) => {
     });
 
     c.status(201);
-    return c.json({ id: blog.id });
+    return c.json({
+      success: true,
+      id: blog.id,
+      message: "Blog created successfully",
+    });
   } catch (error) {
     c.status(500);
     console.log(error);
-    return c.text("unable to create a blog");
+    return c.json({
+      success: false,
+      message: "unable to create a blog",
+    });
   }
 });
 
@@ -101,11 +108,18 @@ blogRoutes.put("/", async (c) => {
     });
 
     c.status(200);
-    return c.json({ id: blog.id });
+    return c.json({
+      success: true,
+      id: blog.id,
+      message: "Blog updated successfully",
+    });
   } catch (error) {
     c.status(500);
     console.log(error);
-    return c.text("unable to update the blog");
+    return c.json({
+      success: false,
+      message: "unable to update the blog",
+    });
   }
 });
 
@@ -137,11 +151,14 @@ blogRoutes.get("/", async (c) => {
       },
     });
 
-    return c.json({ blog });
+    return c.json({ success: true, blog: blog });
   } catch (error) {
     c.status(500);
     console.log(error);
-    return c.text("unable to fetch route");
+    return c.json({
+      success: false,
+      message: "unable to fetch route",
+    });
   }
 });
 
