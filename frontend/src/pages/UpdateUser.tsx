@@ -58,27 +58,30 @@ const UpdateUser = () => {
     <div>
       <Navbar />
       <div className="max-w-7xl mx-auto flex justify-center items-center gap-5">
-        <div className="size-64 rounded-full relative">
+        <div className="size-64 relative">
           <button
-            className="cursor-pointer absolute right-4 -translate-x-1/2 top-2"
+            className="cursor-pointer absolute right-0 top-0 z-10 bg-white rounded-full p-1 shadow-md"
             onClick={handleImageClick}
             type="button"
           >
-            <Pencil />
+            <Pencil size={16} />
           </button>
-          <input
-            type="file"
-            hidden
-            id="image_Updater"
-            accept="image/*"
-            ref={imageRef}
-            onChange={handleImageChange}
-          />
-          <img
-            src={image}
-            alt="Profile"
-            className="rounded-full object-contain w-full h-full"
-          />
+
+          <div className="w-full h-full rounded-full overflow-hidden">
+            <input
+              type="file"
+              hidden
+              id="image_Updater"
+              accept="image/*"
+              ref={imageRef}
+              onChange={handleImageChange}
+            />
+            <img
+              src={image}
+              alt="Profile"
+              className="object-cover w-full h-full"
+            />
+          </div>
         </div>
         <div className="w-1/2 mt-10">
           <form
