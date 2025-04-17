@@ -39,7 +39,7 @@ export const UpdateUser = z
       .optional(),
     name: z.string().optional(),
     bio: z.string().optional(),
-    profileImg: z.instanceof(File).optional(),
+    profileImg: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -60,7 +60,7 @@ export const UpdateUser = z
 export const CreateBlogInput = z.object({
   title: z.string(),
   content: z.string(),
-  titleImg: z.instanceof(File).optional(),
+  titleImg: z.string().optional(),
   published: z.boolean(),
 });
 
@@ -68,7 +68,7 @@ export const UpdateBlogInput = z
   .object({
     id: z.string(),
     title: z.string().optional(),
-    titleImg: z.instanceof(File).optional(),
+    titleImg: z.string().optional(),
     content: z.string().optional(),
     published: z.boolean().optional(),
   })

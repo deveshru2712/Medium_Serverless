@@ -1,6 +1,6 @@
 {
   "name": "@deveshru2712/medium_common",
-  "version": "2.3.0",
+  "version": "2.5.0",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
