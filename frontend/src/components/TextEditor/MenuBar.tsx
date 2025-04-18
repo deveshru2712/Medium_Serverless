@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { Editor } from "@tiptap/react";
 import React from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -32,10 +34,46 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
+      try {
+        const reader = new FileReader();
 
-      editor.chain().focus().setImage({ src: imageUrl }).run();
+        reader.onload = async (event) => {
+          try {
+            const fileUrl = event.target?.result as string;
 
+            // Upload to Cloudinary
+            const cloudName = import.meta.env.VITE_CLOUD_NAME;
+            const formData = new FormData();
+            formData.append("file", fileUrl);
+            formData.append("upload_preset", "medium");
+
+            const response = await axios.post(
+              `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+              formData
+            );
+
+            const imageUrl = response.data.secure_url;
+
+            // Set image in editor
+            editor.chain().focus().setImage({ src: imageUrl }).run();
+          } catch (error) {
+            toast.error("Unable to upload the image");
+            console.error("Error uploading image:", error);
+          }
+        };
+
+        reader.onerror = (error) => {
+          toast.error("Unable to read the file");
+          console.error("Error reading file:", error);
+        };
+
+        reader.readAsDataURL(file);
+      } catch (error) {
+        toast.error("Unable to process the image");
+        console.error("Error processing image:", error);
+      }
+
+      // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }

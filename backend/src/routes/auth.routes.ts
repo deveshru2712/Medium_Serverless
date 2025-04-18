@@ -248,7 +248,6 @@ authRouter.put("/update", async (c) => {
 
         interface CloudinaryUploadResponse {
           secure_url: string;
-          // Add other properties you might need from the response
           public_id?: string;
           url?: string;
           asset_id?: string;
