@@ -123,7 +123,7 @@ blogRoutes.put("/", async (c) => {
   }
 });
 
-// fetching the blog
+// fetching my the blog
 blogRoutes.get("/", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -161,5 +161,7 @@ blogRoutes.get("/", async (c) => {
     });
   }
 });
+
+//fetching bulk blog
 
 export default blogRoutes;

@@ -12,13 +12,20 @@ import {
   ListOrdered,
   Strikethrough,
   Image as ImageIcon,
+  Loader2,
 } from "lucide-react";
 import { Editor } from "@tiptap/react";
 import React from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const MenuBar = ({ editor }: { editor: Editor | null }) => {
+interface MenuBarProps {
+  editor: Editor | null;
+  isUploading: boolean;
+  setIsUploading: (value: boolean) => void;
+}
+
+const MenuBar = ({ editor, isUploading, setIsUploading }: MenuBarProps) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   if (!editor) {
@@ -35,6 +42,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     const file = e.target.files?.[0];
     if (file) {
       try {
+        setIsUploading(true);
         const reader = new FileReader();
 
         reader.onload = async (event) => {
@@ -56,21 +64,26 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
             // Set image in editor
             editor.chain().focus().setImage({ src: imageUrl }).run();
+            toast.success("Image uploaded successfully");
           } catch (error) {
             toast.error("Unable to upload the image");
             console.error("Error uploading image:", error);
+          } finally {
+            setIsUploading(false);
           }
         };
 
         reader.onerror = (error) => {
           toast.error("Unable to read the file");
           console.error("Error reading file:", error);
+          setIsUploading(false);
         };
 
         reader.readAsDataURL(file);
       } catch (error) {
         toast.error("Unable to process the image");
         console.error("Error processing image:", error);
+        setIsUploading(false);
       }
 
       // Reset file input
@@ -155,10 +168,15 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       tooltip: "Highlight",
     },
     {
-      icon: <ImageIcon className="size-4" />,
-      onClick: addImage,
+      icon: isUploading ? (
+        <Loader2 className="size-4 animate-spin" />
+      ) : (
+        <ImageIcon className="size-4" />
+      ),
+      onClick: isUploading ? () => {} : addImage,
       pressed: false,
-      tooltip: "Insert Image",
+      tooltip: isUploading ? "Uploading..." : "Insert Image",
+      disabled: isUploading,
     },
   ];
 
@@ -172,6 +190,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             onToggle={item.onClick}
             pressed={item.pressed}
             tooltip={item.tooltip}
+            disabled={item.disabled}
           />
         ))}
       </div>
@@ -181,6 +200,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         onChange={handleFileChange}
         accept="image/*"
         className="hidden"
+        disabled={isUploading}
       />
     </>
   );
@@ -193,17 +213,27 @@ interface ToggleProps {
   pressed: boolean;
   onToggle: () => void;
   tooltip?: string;
+  disabled?: boolean;
 }
 
-const Toggle = ({ icon, pressed, onToggle, tooltip }: ToggleProps) => {
+const Toggle = ({
+  icon,
+  pressed,
+  onToggle,
+  tooltip,
+  disabled,
+}: ToggleProps) => {
   return (
     <button
       className={`cursor-pointer p-2 ${
         pressed ? "bg-black/10 text-blue-600" : ""
-      } rounded-sm hover:bg-black/5 transition-colors`}
+      } ${
+        disabled ? "opacity-60 cursor-not-allowed" : "hover:bg-black/5"
+      } rounded-sm transition-colors`}
       onClick={onToggle}
       aria-pressed={pressed}
       title={tooltip}
+      disabled={disabled}
     >
       {icon}
     </button>

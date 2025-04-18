@@ -5,8 +5,9 @@ import TextAlign from "@tiptap/extension-text-align";
 import Image from "@tiptap/extension-image";
 import Heading from "@tiptap/extension-heading";
 import MenuBar from "./MenuBar";
-
 import "./style.css";
+import { useState } from "react";
+import Loader from "../Loader";
 
 interface EditorProps {
   content: string;
@@ -14,6 +15,15 @@ interface EditorProps {
 }
 
 const Editor = ({ content, onChange }: EditorProps) => {
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleUploadStateChange = (uploading: boolean) => {
+    setIsUploading(uploading);
+    if (editor) {
+      editor.setEditable(!uploading);
+    }
+  };
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -36,7 +46,6 @@ const Editor = ({ content, onChange }: EditorProps) => {
       }),
     ],
     content: content,
-
     editorProps: {
       attributes: {
         class: "min-h-[156px] border rounded-md outline-none px-3 py-2 tiptap",
@@ -48,10 +57,19 @@ const Editor = ({ content, onChange }: EditorProps) => {
   });
 
   return (
-    <>
-      <MenuBar editor={editor} />
+    <div className="relative">
+      {isUploading && (
+        <div className="absolute bg-white/50 inset-0">
+          <Loader />
+        </div>
+      )}
+      <MenuBar
+        editor={editor}
+        isUploading={isUploading}
+        setIsUploading={handleUploadStateChange}
+      />
       <EditorContent editor={editor} />
-    </>
+    </div>
   );
 };
 
