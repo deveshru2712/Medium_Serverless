@@ -32,11 +32,6 @@ export const authStore = create<authStoreTypes>((set) => ({
     set({ isLoading: true });
     try {
       const response = await axios.post(`/api/auth/signup`, credentials);
-      const token = response.data.key;
-
-      // setting the the jwt token in localstorage
-
-      localStorage.setItem("token", token);
       set({ User: response.data.user, isLoading: false });
       toast.success(response.data.message);
     } catch (error) {
@@ -53,10 +48,6 @@ export const authStore = create<authStoreTypes>((set) => ({
     set({ isLoading: true });
     try {
       const response = await axios.post(`/api/auth/signin`, credentials);
-      const token = response.data.key;
-      // setting the the jwt token in localstorage
-
-      localStorage.setItem("token", token);
       set({ User: response.data.user, isLoading: false });
       toast.success(response.data.message);
     } catch (error) {
