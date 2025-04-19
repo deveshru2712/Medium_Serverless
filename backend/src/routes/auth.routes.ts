@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
 import { sign, verify } from "hono/jwt";
+import { getCookie, setCookie } from "hono/cookie";
 
 import {
   SignInInput,
@@ -28,33 +29,44 @@ authRouter.get("/me", async (c) => {
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const header = c.req.header("Authorization") || "";
-
-  const token = header.split(" ")[1];
+  const token = getCookie(c, "key");
 
   if (!token) {
-    c.status(403);
-    return c.json({ error: "No token provided" });
+    c.status(401);
+    return c.json({
+      success: false,
+      message: "Unauthorized: No authentication token provided",
+    });
   }
 
-  const response = await verify(token, c.env.JWT_SECRET);
+  try {
+    const response = await verify(token, c.env.JWT_SECRET);
 
-  const userId = String(response.id);
+    const userId = String(response.id);
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      bio: true,
-      profileImg: true,
-    },
-  });
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        bio: true,
+        profileImg: true,
+      },
+    });
 
-  return c.json({
-    user,
-  });
+    return c.json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    c.status(401);
+    console.log("unable to verify the user");
+    c.json({
+      success: false,
+      message: "unable to verify the user ",
+    });
+  }
 });
 
 authRouter.post("/signup", async (c) => {
@@ -101,9 +113,16 @@ authRouter.post("/signup", async (c) => {
     // creating a token
     const token = await sign({ id: newUser.id }, c.env.JWT_SECRET);
 
+    // setting them up as a cookie
+    setCookie(c, "key", token, {
+      httpOnly: true,
+      sameSite: "Strict",
+      maxAge: 1 * 24 * 60 * 60,
+      secure: true,
+    });
+
     return c.json({
       success: true,
-      key: token,
       user: newUser,
       message: "Account created successfully",
     });
@@ -158,9 +177,16 @@ authRouter.post("/signin", async (c) => {
     }
 
     const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+
+    setCookie(c, "key", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
+      maxAge: 1 * 24 * 60 * 60,
+    });
+
     return c.json({
       success: true,
-      key: token,
       user: user,
       message: "Logged in successfully",
     });
@@ -307,5 +333,9 @@ authRouter.put("/update", async (c) => {
     });
   }
 });
+
+// authRouter.post("/logout", async (c) => {
+//   const;
+// });
 
 export default authRouter;
