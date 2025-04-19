@@ -8,8 +8,8 @@ import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import Loader from "./components/Loader";
 import MainPage from "./pages/MainPage";
-import CreateBlog from "./pages/CreateBlog";
-import UpdateUser from "./pages/UpdateUser";
+import CreateBlogPage from "./pages/CreateBlogPage";
+import UpdateUserPage from "./pages/UpdateUserPage";
 
 const App = () => {
   const { User, authCheck, isLoading } = authStore();
@@ -37,12 +37,12 @@ const App = () => {
 
         <Route
           path="/update"
-          element={User ? <UpdateUser /> : <Navigate to={"/login"} />}
+          element={User ? <UpdateUserPage /> : <Navigate to={"/login"} />}
         />
 
         <Route
           path="/create"
-          element={User ? <CreateBlog /> : <Navigate to={"/login"} />}
+          element={User ? <CreateBlogPage /> : <Navigate to={"/login"} />}
         />
 
         <Route

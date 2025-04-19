@@ -4,7 +4,7 @@ import { authStore } from "../store/authStore";
 import { UpdateUserType } from "@deveshru2712/medium_common";
 import { Pencil } from "lucide-react";
 
-const UpdateUser = () => {
+const UpdateUserPage = () => {
   const { User, update } = authStore();
 
   const imageRef = useRef<HTMLInputElement>(null);
@@ -160,4 +160,4 @@ const UpdateUser = () => {
   );
 };
 
-export default UpdateUser;
+export default UpdateUserPage;

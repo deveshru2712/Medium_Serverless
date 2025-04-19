@@ -1,8 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Bell, NotebookPen, Search, User } from "lucide-react";
+import { Bell, Loader, NotebookPen, Search, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { authStore } from "../store/authStore";
 
 const Navbar = () => {
+  const { logOut, isLoading } = authStore();
+
   const [active, setActive] = useState(false);
 
   const dropDownRef = useRef<HTMLDivElement | null>(null);
@@ -95,7 +98,17 @@ const Navbar = () => {
                   <Link to={"/myblog"}>My Blog</Link>
                 </li>
                 <li className="hover:underline">
-                  <Link to={"/logout"}>Logout</Link>
+                  <button
+                    className="cursor-pointer hover:underline"
+                    onClick={logOut}
+                  >
+                    Logout
+                  </button>
+                  {isLoading && (
+                    <div className="absolute inset-0">
+                      <Loader />
+                    </div>
+                  )}
                 </li>
               </ul>
             </div>

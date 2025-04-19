@@ -2,7 +2,7 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Tiptap from "../components/TextEditor/Tiptap";
 
-const CreateBlog = () => {
+const CreateBlogPage = () => {
   const [title, setTitle] = useState("");
   const [blog, setBlog] = useState("");
 
@@ -41,4 +41,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
+export default CreateBlogPage;
