@@ -22,6 +22,13 @@ interface Env {
   Cloudinary_Api_Secret: string;
 }
 
+interface CloudinaryUploadResponse {
+  secure_url: string;
+  public_id?: string;
+  url?: string;
+  asset_id?: string;
+}
+
 const authRouter = new Hono<{ Bindings: Env }>();
 
 authRouter.get("/me", async (c) => {
@@ -55,6 +62,7 @@ authRouter.get("/me", async (c) => {
       },
     });
 
+    c.status(200);
     return c.json({
       success: true,
       user,
@@ -121,6 +129,7 @@ authRouter.post("/signup", async (c) => {
       secure: true,
     });
 
+    c.status(200);
     return c.json({
       success: true,
       user: newUser,
@@ -185,6 +194,7 @@ authRouter.post("/signin", async (c) => {
       maxAge: 1 * 24 * 60 * 60,
     });
 
+    c.status(200);
     return c.json({
       success: true,
       user: user,
@@ -209,8 +219,8 @@ authRouter.put("/update", async (c) => {
   }).$extends(withAccelerate());
 
   // Authenticate user
-  const header = c.req.header("Authorization") || "";
-  const token = header.split(" ")[1];
+  const token = getCookie(c, "key");
+
   if (!token) {
     c.status(401);
     return c.json({
@@ -272,13 +282,6 @@ authRouter.put("/update", async (c) => {
           );
         }
 
-        interface CloudinaryUploadResponse {
-          secure_url: string;
-          public_id?: string;
-          url?: string;
-          asset_id?: string;
-        }
-
         const uploadResult: CloudinaryUploadResponse =
           await uploadResponse.json();
 
@@ -312,6 +315,7 @@ authRouter.put("/update", async (c) => {
       data: updateData,
     });
 
+    c.status(200);
     return c.json({
       success: true,
       message: "User profile updated successfully",
@@ -334,8 +338,24 @@ authRouter.put("/update", async (c) => {
   }
 });
 
-// authRouter.post("/logout", async (c) => {
-//   const;
-// });
+authRouter.post("/logout", async (c) => {
+  try {
+    setCookie(c, "key", "", {
+      maxAge: 0,
+    });
+
+    c.status(200);
+    return c.json({
+      success: true,
+      message: "Logout successfully",
+    });
+  } catch (error) {
+    c.status(500);
+    c.json({
+      success: false,
+      message: "Unable to logout ",
+    });
+  }
+});
 
 export default authRouter;

@@ -149,6 +149,7 @@ blogRoutes.get("/", async (c) => {
       },
     });
 
+    c.status(200);
     return c.json({ success: true, blog: blog });
   } catch (error) {
     c.status(500);
