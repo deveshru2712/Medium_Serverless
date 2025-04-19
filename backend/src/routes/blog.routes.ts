@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { verify } from "hono/jwt";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { CreateBlogType, UpdateBlogType } from "@deveshru2712/medium_common";
+import { getCookie } from "hono/cookie";
 
 interface Env {
   DATABASE_URL: string;
@@ -22,13 +23,10 @@ const blogRoutes = new Hono<{
 // this is a middleware
 
 blogRoutes.use("/*", async (c, next) => {
-  const header = c.req.header("Authorization") || "";
-
-  const token = header.split(" ")[1];
-
+  const token = getCookie(c, "key");
   if (!token) {
-    c.status(403);
-    return c.json({ error: "No token provided" });
+    c.status(401);
+    return c.json({ success: false, message: "Unauthorized" });
   }
 
   const response = await verify(token, c.env.JWT_SECRET);
