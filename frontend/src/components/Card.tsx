@@ -8,9 +8,9 @@ type CardProps = Pick<
 
 const Card = ({ title, content, author, titleImg, createdAt }: CardProps) => {
   return (
-    <div className="w-full">
+    <div className="w-full py-5">
       <div>
-        <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center gap-4">
           <div className="flex flex-col justify-center items-start gap-2 md:gap-4">
             <div className="text-xl md:text-3xl font-semibold font-segoeu-heavy">
               {title}
