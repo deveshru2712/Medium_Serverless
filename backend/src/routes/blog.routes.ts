@@ -122,7 +122,7 @@ blogRoutes.put("/", async (c) => {
 });
 
 // fetching my the blog
-blogRoutes.get("/", async (c) => {
+blogRoutes.get("/my", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -162,5 +162,36 @@ blogRoutes.get("/", async (c) => {
 });
 
 //fetching bulk blog
+
+blogRoutes.get("/", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const blog = await prisma.post.findMany({
+      select: {
+        title: true,
+        content: true,
+        createdAt: true,
+        titleImg: true,
+        author: { select: { name: true, profileImg: true, bio: true } },
+      },
+    });
+
+    c.status(200);
+    return c.json({
+      success: true,
+      blog: blog,
+    });
+  } catch (error) {
+    c.status(500);
+    console.log(error);
+    return c.json({
+      success: false,
+      message: "Unable to fetch blogs",
+    });
+  }
+});
 
 export default blogRoutes;

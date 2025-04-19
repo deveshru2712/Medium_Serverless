@@ -1,4 +1,6 @@
+import { CreateBlogType } from "@deveshru2712/medium_common";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { create } from "zustand";
 
 export interface Blog {
@@ -20,7 +22,7 @@ interface BlogStoreType {
   Blog: Blog | null;
   isProcessing: boolean;
   fetchingBlog: () => void;
-  creatingBlog: () => void;
+  creatingBlog: (body: CreateBlogType) => void;
   updatingBlog: () => void;
 }
 
@@ -42,7 +44,20 @@ const blogStore = create<BlogStoreType>((set) => ({
       set({ BlogList: null, isProcessing: false });
     }
   },
-  creatingBlog: async () => {},
+  creatingBlog: async (body) => {
+    set({ isProcessing: true });
+    try {
+      const response = await axios.post(`/api/blog`, body);
+      toast.success(response.data.message);
+      set({ isProcessing: false });
+    } catch (error) {
+      set({ isProcessing: false });
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create blog"
+      );
+      console.log(error);
+    }
+  },
   updatingBlog: async () => {},
 }));
 
