@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { UserIcon } from "lucide-react";
+import { Pencil, Trash, UserIcon } from "lucide-react";
 
 import { authStore } from "../store/authStore";
-import blogStore, { FetchType } from "../store/blogStore";
+import blogStore from "../store/blogStore";
+import { FetchType } from "../utils/types";
 
 import Card from "../components/Card";
 import Loader from "../components/Loader";
@@ -76,22 +77,20 @@ const MyBlogPage = () => {
                   <Link to={"/"}>Home</Link>
                 </li>
                 <li className="hover:underline">
-                  <Link to={"/update"}>My profile</Link>
+                  <Link to={"/profileUpdate"}>My profile</Link>
                 </li>
-                <li className="hover:underline">
-                  <button
-                    className="cursor-pointer hover:underline"
-                    onClick={logOut}
-                  >
-                    Logout
-                  </button>
-                  {isLoading && (
-                    <div className="absolute inset-0">
-                      <Loader />
-                    </div>
-                  )}
-                </li>
+                <button
+                  className="cursor-pointer hover:underline"
+                  onClick={logOut}
+                >
+                  Logout
+                </button>
               </ul>
+              {isLoading && (
+                <div className="absolute inset-0">
+                  <Loader />
+                </div>
+              )}
             </div>
           </button>
         </div>
@@ -124,11 +123,14 @@ const MyBlogPage = () => {
                     createdAt={blog.createdAt}
                   />
                   <div className="bg-slate-200 rounded-md  w-full py-1 px-2 flex items-center justify-end gap-3">
-                    <button className="border border-white rounded-md px-2 cursor-pointer py-1 text-lg font-semibold ">
-                      Edit
+                    <button
+                      className=" flex justify-center items-center border gap-2 active:scale-105 duration-200 border-white rounded-md px-2 cursor-pointer py-1 text-lg font-semibold "
+                      onClick={() => navigate(`/updateBlog/${blog.id}`)}
+                    >
+                      Edit <Pencil size={18} />
                     </button>
-                    <button className="border border-white rounded-md px-2 cursor-pointer py-1 text-lg font-semibold ">
-                      Delete
+                    <button className=" flex justify-center items-center border gap-2 active:scale-105 duration-200 border-white rounded-md px-2 cursor-pointer py-1 text-lg font-semibold ">
+                      Delete <Trash size={18} />
                     </button>
                   </div>
                 </div>

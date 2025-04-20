@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Tiptap from "../components/TextEditor/Tiptap";
 
 import { FilePlus, Pencil } from "lucide-react";
@@ -10,32 +10,74 @@ import blogStore from "../store/blogStore";
 
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { WorkType } from "../utils/types";
 
-const CreateBlogPage = () => {
+interface DialogPageProps {
+  workType: WorkType;
+}
+
+const DialogPage = ({ workType }: DialogPageProps) => {
   const [title, setTitle] = useState("");
   const [blog, setBlog] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [titleImg, setTitleImg] = useState<string>(
     "https://images.unsplash.com/photo-1744380623181-a675718f120c?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   );
+
+  const { Blog, creatingBlog, fetchBlog, updatingBlog, isProcessing } =
+    blogStore();
+
   const InputRef = useRef<HTMLInputElement | null>(null);
 
-  const { creatingBlog, isProcessing } = blogStore();
+  const params = useParams();
+  const blogId = params.id;
 
   const navigate = useNavigate();
+
+  // Use useEffect to handle fetching blog data for update mode
+  useEffect(() => {
+    if (workType === WorkType.UPDATE && blogId) {
+      // Fetch the blog only once when component mounts
+      fetchBlog(blogId);
+    }
+  }, [workType, blogId, fetchBlog]);
+
+  // Use another useEffect to update form fields when Blog data changes
+  useEffect(() => {
+    if (workType === WorkType.UPDATE && Blog) {
+      setTitle(Blog.title || "");
+      setBlog(Blog.content || "");
+      if (Blog.titleImg) {
+        setTitleImg(Blog.titleImg);
+      }
+    }
+  }, [Blog, workType]);
 
   const onChangeHandler = (content: string) => {
     setBlog(content);
   };
 
   const onSubmit = async () => {
-    await creatingBlog({
-      title,
-      content: blog,
-      titleImg: titleImg,
-      published: true,
-    });
+    if (workType === WorkType.UPDATE && blogId) {
+      updatingBlog(
+        {
+          id: blogId,
+          title: title,
+          content: blog,
+          titleImg: titleImg,
+          published: true,
+        },
+        blogId
+      );
+    } else if (workType === WorkType.CREATE) {
+      creatingBlog({
+        title,
+        content: blog,
+        titleImg: titleImg,
+        published: true,
+      });
+    }
     navigate("/", { replace: false });
   };
 
@@ -171,7 +213,7 @@ const CreateBlogPage = () => {
             onClick={onSubmit}
             className="bg-blue-500 text-lg font-semibold px-2 py-1 text-white rounded-sm cursor-pointer mt-2"
           >
-            Create
+            {workType === WorkType.CREATE ? "Create" : "Update"}
           </button>
         </div>
       )}
@@ -179,4 +221,4 @@ const CreateBlogPage = () => {
   );
 };
 
-export default CreateBlogPage;
+export default DialogPage;

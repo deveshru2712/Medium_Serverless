@@ -92,7 +92,7 @@ const Navbar = () => {
             >
               <ul className="flex flex-col justify-center items-start text-lg font-semibold whitespace-nowrap">
                 <li className="hover:underline">
-                  <Link to={"/update"}>My profile</Link>
+                  <Link to={"/profileUpdate"}>My profile</Link>
                 </li>
                 <li className="hover:underline">
                   <Link to={"/blogs"}>My Blog</Link>

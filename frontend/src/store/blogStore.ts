@@ -1,7 +1,9 @@
-import { CreateBlogType } from "@deveshru2712/medium_common";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { create } from "zustand";
+import toast from "react-hot-toast";
+import axios from "axios";
+
+import { CreateBlogType, UpdateBlogType } from "@deveshru2712/medium_common";
+import { FetchType } from "../utils/types";
 
 export interface Blog {
   id: string;
@@ -17,11 +19,6 @@ export interface Blog {
   };
 }
 
-export enum FetchType {
-  personal = "personal",
-  public = "public",
-}
-
 interface BlogStoreType {
   BlogList: Blog[] | null;
   Blog: Blog | null;
@@ -29,7 +26,7 @@ interface BlogStoreType {
   fetchingBlogList: (type: FetchType) => void;
   fetchBlog: (id: string) => void;
   creatingBlog: (body: CreateBlogType) => void;
-  updatingBlog: () => void;
+  updatingBlog: (body: UpdateBlogType, id: string) => void;
 }
 
 const blogStore = create<BlogStoreType>((set) => ({
@@ -74,7 +71,20 @@ const blogStore = create<BlogStoreType>((set) => ({
       console.log(error);
     }
   },
-  updatingBlog: async () => {},
+  updatingBlog: async (body, id) => {
+    set({ isProcessing: true });
+    try {
+      const response = await axios.put(`/api/blog/${id}`, body);
+      toast.success(response.data.message);
+      set({ isProcessing: false });
+    } catch (error) {
+      set({ isProcessing: false });
+      console.log(error);
+      toast.error(
+        error instanceof Error ? error.message : "Unable to update the blog"
+      );
+    }
+  },
 }));
 
 export default blogStore;

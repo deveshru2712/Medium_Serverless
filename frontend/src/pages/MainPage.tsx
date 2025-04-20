@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import blogStore, { FetchType } from "../store/blogStore";
+import blogStore from "../store/blogStore";
+import { FetchType } from "../utils/types";
 
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";

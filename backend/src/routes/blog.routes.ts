@@ -84,14 +84,17 @@ blogRoutes.post("/", async (c) => {
 });
 
 // updating the blog
-blogRoutes.put("/", async (c) => {
+blogRoutes.put("/:id", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
+  const blogId = c.req.param("id");
+
   const userId = c.get("userId");
 
   // parsing the body
+
   const body: UpdateBlogType = await c.req.json();
 
   try {
@@ -104,6 +107,14 @@ blogRoutes.put("/", async (c) => {
         published: body.published,
       },
     });
+
+    if (!blog) {
+      c.status(404);
+      return c.json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
 
     c.status(200);
     return c.json({
