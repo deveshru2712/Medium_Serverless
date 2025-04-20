@@ -36,17 +36,9 @@ export const authStore = create<authStoreTypes>((set) => ({
       toast.success(response.data.message[0]);
     } catch (error) {
       set({ User: null, isLoading: false });
-
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      toast.error(
+        error instanceof Error ? error.message : "Unable to create an account"
+      );
     }
   },
   logIn: async (credentials) => {
@@ -58,17 +50,7 @@ export const authStore = create<authStoreTypes>((set) => ({
     } catch (error) {
       console.log(error);
       set({ isLoading: false });
-
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      toast.error(error instanceof Error ? error.message : "Unable to Login");
     }
   },
   logOut: async () => {
@@ -80,17 +62,7 @@ export const authStore = create<authStoreTypes>((set) => ({
     } catch (error) {
       console.log(error);
       set({ isLoading: false });
-
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      toast.error(error instanceof Error ? error.message : "Unable to Logout");
     }
   },
   update: async (credentials) => {
@@ -101,16 +73,11 @@ export const authStore = create<authStoreTypes>((set) => ({
     } catch (error) {
       console.log(error);
       set({ isLoading: false });
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Unable to update the User Profile"
+      );
     }
   },
   authCheck: async () => {
@@ -120,6 +87,9 @@ export const authStore = create<authStoreTypes>((set) => ({
       set({ User: response.data.user, isLoading: false });
     } catch (error) {
       set({ User: null, isLoading: false });
+      toast.error(
+        error instanceof Error ? error.message : "Unable to Authenticate"
+      );
     }
   },
 }));

@@ -87,9 +87,12 @@ authRouter.post("/signup", async (c) => {
 
   if (!success) {
     c.status(400);
+    const message = error.issues.map((issue) => ({
+      message: issue.message,
+    }))[0].message;
     return c.json({
       success: false,
-      message: error.issues.map((issue) => ({ message: issue.message })),
+      message: message,
     });
   }
 
@@ -158,9 +161,12 @@ authRouter.post("/signin", async (c) => {
   const { success, error } = SignInInput.safeParse(body);
   if (!success) {
     c.status(400);
+    const message = error.issues.map((issue) => ({
+      message: issue.message,
+    }))[0].message;
     return c.json({
       success: false,
-      message: error.message,
+      message: message,
     });
   }
 
@@ -238,10 +244,12 @@ authRouter.put("/update", async (c) => {
     const { success, error } = UpdateUser.safeParse(body);
     if (!success) {
       c.status(400);
+      const message = error.issues.map((issue) => ({
+        message: issue.message,
+      }))[0].message;
       return c.json({
         success: false,
-        message: "Invalid request data",
-        error: error.message,
+        message: message,
       });
     }
 

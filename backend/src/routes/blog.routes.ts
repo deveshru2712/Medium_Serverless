@@ -2,7 +2,12 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { verify } from "hono/jwt";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import { CreateBlogType, UpdateBlogType } from "@deveshru2712/medium_common";
+import {
+  CreateBlogInput,
+  CreateBlogType,
+  UpdateBlogInput,
+  UpdateBlogType,
+} from "@deveshru2712/medium_common";
 import { getCookie } from "hono/cookie";
 
 interface Env {
@@ -50,6 +55,20 @@ blogRoutes.post("/", async (c) => {
 
   // parsing the body
   const body: CreateBlogType = await c.req.json();
+
+  const { success, error } = CreateBlogInput.safeParse(body);
+
+  if (!success) {
+    c.status(400);
+    const message = error.issues.map((issue) => ({
+      message: issue.message,
+    }))[0].message;
+    return c.json({
+      success: false,
+      message: message,
+    });
+  }
+
   try {
     const blog = await prisma.post.create({
       data: {
@@ -101,6 +120,19 @@ blogRoutes.put("/:id", async (c) => {
   }
 
   const body: UpdateBlogType = await c.req.json();
+
+  const { success, error } = UpdateBlogInput.safeParse(body);
+
+  if (!success) {
+    c.status(400);
+    const message = error.issues.map((issue) => ({
+      message: issue.message,
+    }))[0].message;
+    return c.json({
+      success: false,
+      message: message,
+    });
+  }
 
   try {
     const blog = await prisma.post.update({

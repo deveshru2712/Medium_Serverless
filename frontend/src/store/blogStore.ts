@@ -42,16 +42,9 @@ const blogStore = create<BlogStoreType>((set) => ({
       set({ BlogList: response.data.blog, isProcessing: false });
     } catch (error) {
       set({ BlogList: null, isProcessing: false });
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      toast.error(
+        error instanceof Error ? error.message : "Unable to fetch Blogs"
+      );
     }
   },
   fetchBlog: async (id) => {
@@ -61,16 +54,9 @@ const blogStore = create<BlogStoreType>((set) => ({
       set({ isProcessing: false, Blog: response.data.blog });
     } catch (error) {
       set({ Blog: null, isProcessing: false });
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      toast.error(
+        error instanceof Error ? error.message : "Unable to fetch Blog"
+      );
     }
   },
   creatingBlog: async (body) => {
@@ -81,16 +67,9 @@ const blogStore = create<BlogStoreType>((set) => ({
       set({ isProcessing: false });
     } catch (error) {
       set({ isProcessing: false });
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      toast.error(
+        error instanceof Error ? error.message : "Unable to create blog"
+      );
     }
   },
   updatingBlog: async (body, id) => {
@@ -101,16 +80,9 @@ const blogStore = create<BlogStoreType>((set) => ({
       set({ Blog: null, isProcessing: false });
     } catch (error) {
       set({ Blog: null, isProcessing: false });
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      toast.error(
+        error instanceof Error ? error.message : "Unable to update blog"
+      );
     }
   },
   deletingBlog: async (id) => {
@@ -126,16 +98,10 @@ const blogStore = create<BlogStoreType>((set) => ({
 
       toast.success(response.data.message);
     } catch (error) {
-      if (error instanceof Error) {
-        const message = error.response?.data?.message;
-        if (Array.isArray(message)) {
-          message.forEach((err: { message: string }) =>
-            toast.error(err.message)
-          );
-        } else {
-          toast.error(message || "An error occurred while login");
-        }
-      }
+      set({ isProcessing: false, Blog: null });
+      toast.error(
+        error instanceof Error ? error.message : "Unable to delete Blog"
+      );
     }
   },
 }));
