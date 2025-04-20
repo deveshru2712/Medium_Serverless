@@ -95,6 +95,11 @@ blogRoutes.put("/:id", async (c) => {
 
   // parsing the body
 
+  if (!blogId && !userId) {
+    c.status(409);
+    return c.json({ success: false, message: "Unauthorized" });
+  }
+
   const body: UpdateBlogType = await c.req.json();
 
   try {
@@ -169,6 +174,45 @@ blogRoutes.get("/personal", async (c) => {
       success: false,
       message: "unable to fetch route",
     });
+  }
+});
+
+// deleting my blog
+
+blogRoutes.delete("/:id", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const blogId = c.req.param("id");
+
+  const userId = c.get("userId");
+
+  if (!blogId && !userId) {
+    c.status(409);
+    return c.json({ success: false, message: "Unauthorized" });
+  }
+  try {
+    const blog = await prisma.post.delete({
+      where: { id: blogId, authorId: userId },
+    });
+
+    if (!blog) {
+      c.status(400);
+      return c.json({
+        success: false,
+        message: "Unable to delete the blog",
+      });
+    }
+
+    c.status(200);
+    return c.json({
+      success: true,
+      message: "Blog deleted successfully",
+    });
+  } catch (error) {
+    c.status(500);
+    return c.json({ success: false, message: "Unable to delete the blog" });
   }
 });
 

@@ -12,7 +12,8 @@ import Loader from "../components/Loader";
 
 const MyBlogPage = () => {
   const { User, logOut, isLoading } = authStore();
-  const { fetchingBlogList, isProcessing, BlogList } = blogStore();
+  const { fetchingBlogList, isProcessing, BlogList, deletingBlog } =
+    blogStore();
 
   const navigate = useNavigate();
 
@@ -129,7 +130,10 @@ const MyBlogPage = () => {
                     >
                       Edit <Pencil size={18} />
                     </button>
-                    <button className=" flex justify-center items-center border gap-2 active:scale-105 duration-200 border-white rounded-md px-2 cursor-pointer py-1 text-lg font-semibold ">
+                    <button
+                      onClick={() => deletingBlog(blog.id)}
+                      className=" flex justify-center items-center border gap-2 active:scale-105 duration-200 border-white rounded-md px-2 cursor-pointer py-1 text-lg font-semibold "
+                    >
                       Delete <Trash size={18} />
                     </button>
                   </div>

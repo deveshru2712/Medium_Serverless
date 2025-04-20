@@ -27,6 +27,7 @@ interface BlogStoreType {
   fetchBlog: (id: string) => void;
   creatingBlog: (body: CreateBlogType) => void;
   updatingBlog: (body: UpdateBlogType, id: string) => void;
+  deletingBlog: (id: string) => void;
 }
 
 const blogStore = create<BlogStoreType>((set) => ({
@@ -76,12 +77,31 @@ const blogStore = create<BlogStoreType>((set) => ({
     try {
       const response = await axios.put(`/api/blog/${id}`, body);
       toast.success(response.data.message);
-      set({ isProcessing: false });
+      set({ Blog: null, isProcessing: false });
     } catch (error) {
-      set({ isProcessing: false });
+      set({ Blog: null, isProcessing: false });
       console.log(error);
       toast.error(
         error instanceof Error ? error.message : "Unable to update the blog"
+      );
+    }
+  },
+  deletingBlog: async (id) => {
+    set({ isProcessing: true });
+    try {
+      const response = await axios.delete(`/api/blog/${id}`);
+      set((state) => ({
+        isProcessing: false,
+        BlogList: state.BlogList
+          ? state.BlogList.filter((blog) => blog.id !== id)
+          : null,
+      }));
+
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error instanceof Error ? error.message : "Unable to delete the blog"
       );
     }
   },
