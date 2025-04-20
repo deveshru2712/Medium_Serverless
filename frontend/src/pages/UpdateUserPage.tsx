@@ -31,7 +31,6 @@ const UpdateUserPage = () => {
 
   const onSubmitHandler = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(form);
     update(form);
   };
 

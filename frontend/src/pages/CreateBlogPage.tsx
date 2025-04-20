@@ -10,6 +10,7 @@ import blogStore from "../store/blogStore";
 
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
+import { useNavigate } from "react-router-dom";
 
 const CreateBlogPage = () => {
   const [title, setTitle] = useState("");
@@ -22,12 +23,20 @@ const CreateBlogPage = () => {
 
   const { creatingBlog, isProcessing } = blogStore();
 
+  const navigate = useNavigate();
+
   const onChangeHandler = (content: string) => {
     setBlog(content);
   };
 
-  const onSubmit = () => {
-    creatingBlog({ title, content: blog, titleImg: titleImg, published: true });
+  const onSubmit = async () => {
+    await creatingBlog({
+      title,
+      content: blog,
+      titleImg: titleImg,
+      published: true,
+    });
+    navigate("/", { replace: false });
   };
 
   const onButtonClick = () => {

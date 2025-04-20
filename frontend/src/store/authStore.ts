@@ -27,7 +27,7 @@ interface authStoreTypes {
 
 export const authStore = create<authStoreTypes>((set) => ({
   User: null,
-  isLoading: false,
+  isLoading: true,
   signUp: async (credentials) => {
     set({ isLoading: true });
     try {
@@ -73,9 +73,7 @@ export const authStore = create<authStoreTypes>((set) => ({
   update: async (credentials) => {
     set({ isLoading: true });
     try {
-      const response = await axios.put(`/api/auth/update`, credentials, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.put(`/api/auth/update`, credentials);
       set({ User: response.data.user, isLoading: false });
     } catch (error) {
       console.log(error);
@@ -90,10 +88,7 @@ export const authStore = create<authStoreTypes>((set) => ({
   authCheck: async () => {
     set({ isLoading: true });
     try {
-      const response = await axios.get("/api/auth/me", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
+      const response = await axios.get("/api/auth/me");
       console.log(response.data.user);
       set({ User: response.data.user, isLoading: false });
     } catch (error) {
