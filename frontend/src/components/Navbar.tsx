@@ -67,11 +67,11 @@ const Navbar = () => {
 
         <div className="flex justify-between items-center gap-8">
           <button
-            className="hidden md:flex cursor-pointer"
+            className="flex cursor-pointer"
             onClick={() => navigate("/create")}
           >
             <NotebookPen />
-            Write
+            <span className="hidden md:flex">Write</span>
           </button>
 
           <button className="cursor-pointer">

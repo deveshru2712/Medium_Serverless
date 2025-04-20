@@ -54,7 +54,7 @@ const MyBlogPage = () => {
   return (
     <div>
       <div className="border-b-2 shadow-md">
-        <div className="max-w-6xl mx-auto w-full py-4 flex justify-between items-center">
+        <div className="max-w-6xl mx-auto w-full px-4 py-4 flex justify-between items-center">
           <div className="flex flex-col justify-center items-start text-left">
             <h1 className=" text-2xl font-semibold font-segoeu-heavy">
               {User?.name}
