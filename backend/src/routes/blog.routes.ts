@@ -122,7 +122,7 @@ blogRoutes.put("/", async (c) => {
 });
 
 // fetching my the blog
-blogRoutes.get("/my", async (c) => {
+blogRoutes.get("/personal", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -163,7 +163,7 @@ blogRoutes.get("/my", async (c) => {
 
 //fetching bulk blog
 
-blogRoutes.get("/", async (c) => {
+blogRoutes.get("/public", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -171,6 +171,7 @@ blogRoutes.get("/", async (c) => {
   try {
     const blog = await prisma.post.findMany({
       select: {
+        id: true,
         title: true,
         content: true,
         createdAt: true,
@@ -192,6 +193,47 @@ blogRoutes.get("/", async (c) => {
       message: "Unable to fetch blogs",
     });
   }
+});
+
+// get single blog
+blogRoutes.get("/:id", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const blogId = c.req.param("id");
+  if (!blogId) {
+    c.status(400);
+    return c.json({
+      success: false,
+      message: "Invalid blog id",
+    });
+  }
+
+  const blog = await prisma.post.findUnique({
+    where: { id: blogId },
+    select: {
+      id: true,
+      title: true,
+      titleImg: true,
+      createdAt: true,
+      content: true,
+      author: { select: { bio: true, name: true, profileImg: true } },
+    },
+  });
+  if (!blog) {
+    c.status(400);
+    return c.json({
+      success: false,
+      message: "No blog found",
+    });
+  }
+
+  c.status(200);
+  return c.json({
+    success: true,
+    blog: blog,
+  });
 });
 
 export default blogRoutes;

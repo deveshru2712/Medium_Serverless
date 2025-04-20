@@ -11,17 +11,23 @@ export interface Blog {
   createdAt: Date;
   titleImg: string;
   author: {
-    name: string | null;
-    profileImg: string | null;
-    bio: string | null;
+    name: string;
+    profileImg: string;
+    bio: string;
   };
+}
+
+export enum FetchType {
+  personal = "personal",
+  public = "public",
 }
 
 interface BlogStoreType {
   BlogList: Blog[] | null;
   Blog: Blog | null;
   isProcessing: boolean;
-  fetchingBlog: () => void;
+  fetchingBlogList: (type: FetchType) => void;
+  fetchBlog: (id: string) => void;
   creatingBlog: (body: CreateBlogType) => void;
   updatingBlog: () => void;
 }
@@ -30,18 +36,28 @@ const blogStore = create<BlogStoreType>((set) => ({
   BlogList: null,
   Blog: null,
   isProcessing: false,
-  fetchingBlog: async () => {
+  fetchingBlogList: async (type) => {
     set({ isProcessing: true });
     try {
-      const response = await axios.get("/api/blog", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      console.log("here are your blogs:", response.data.blog);
+      const response = await axios.get(`/api/blog/${type}`);
+      console.log(response.data.blog);
       set({ BlogList: response.data.blog, isProcessing: false });
     } catch (error) {
       console.log(error);
       set({ BlogList: null, isProcessing: false });
+    }
+  },
+  fetchBlog: async (id) => {
+    set({ isProcessing: true });
+    try {
+      const response = await axios.get(`/api/blog/${id}`);
+      set({ isProcessing: false, Blog: response.data.blog });
+    } catch (error) {
+      set({ Blog: null, isProcessing: false });
+      console.log(error);
+      toast.error(
+        error instanceof Error ? error.message : "Unable to fetch the blog"
+      );
     }
   },
   creatingBlog: async (body) => {

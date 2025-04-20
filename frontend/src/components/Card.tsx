@@ -1,14 +1,48 @@
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
 import { Blog } from "../store/blogStore";
 import formatDate from "../utils/DateFormatter";
+import { useEffect, useState } from "react";
 
 type CardProps = Pick<
   Blog,
   "title" | "content" | "author" | "createdAt" | "titleImg"
->;
+> & { onClick: () => void };
 
-const Card = ({ title, content, author, titleImg, createdAt }: CardProps) => {
+const Card = ({
+  title,
+  content,
+  author,
+  titleImg,
+  createdAt,
+  onClick,
+}: CardProps) => {
+  const [plainTextExcerpt, setPlainTextExcerpt] = useState({
+    desktop: "",
+    mobile: "",
+  });
+
+  const extractor = useEditor({
+    extensions: [StarterKit],
+    content: content,
+    editable: false,
+  });
+
+  useEffect(() => {
+    if (extractor) {
+      const plainText = extractor.getText();
+      setPlainTextExcerpt({
+        desktop:
+          plainText.slice(0, 300) + (plainText.length > 300 ? " ..." : ""),
+        mobile:
+          plainText.slice(0, 100) + (plainText.length > 100 ? " ..." : ""),
+      });
+    }
+  }, [extractor, content]);
+
   return (
-    <div className="w-full py-5">
+    <div className="w-full py-5 cursor-pointer" onClick={onClick}>
       <div>
         <div className="flex justify-between items-center gap-4">
           <div className="flex flex-col justify-center items-start gap-2 md:gap-4">
@@ -16,13 +50,13 @@ const Card = ({ title, content, author, titleImg, createdAt }: CardProps) => {
               {title}
             </div>
             <div className="hidden md:block text-sm md:text-lg font-segoeu-light text-slate-600">
-              {content.slice(0, 300)} ...
+              {plainTextExcerpt.desktop}
             </div>
             <div className="block text-sm md:hidden font-segoeu-light text-slate-600">
-              {content.slice(0, 100)} ...
+              {plainTextExcerpt.mobile}
             </div>
           </div>
-          <div className="size-16 md:h-56 md:w-56 flex  items-center flex-shrink-0  overflow-hidden">
+          <div className="size-16 md:h-56 md:w-56 flex items-center flex-shrink-0 overflow-hidden">
             <img
               src={titleImg}
               alt="title"

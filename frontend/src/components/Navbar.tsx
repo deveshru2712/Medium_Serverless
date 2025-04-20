@@ -9,7 +9,7 @@ const Navbar = () => {
   const [active, setActive] = useState(false);
 
   const dropDownRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const buttonRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -78,7 +78,7 @@ const Navbar = () => {
             <Bell />
           </button>
 
-          <button
+          <div
             ref={buttonRef}
             className="cursor-pointer relative"
             onClick={handleClick}
@@ -95,24 +95,23 @@ const Navbar = () => {
                   <Link to={"/update"}>My profile</Link>
                 </li>
                 <li className="hover:underline">
-                  <Link to={"/myblog"}>My Blog</Link>
+                  <Link to={"/blogs"}>My Blog</Link>
                 </li>
-                <li className="hover:underline">
-                  <button
-                    className="cursor-pointer hover:underline"
-                    onClick={logOut}
-                  >
-                    Logout
-                  </button>
-                  {isLoading && (
-                    <div className="absolute inset-0">
-                      <Loader />
-                    </div>
-                  )}
-                </li>
+                <button
+                  className="cursor-pointer hover:underline"
+                  onClick={logOut}
+                >
+                  Logout
+                </button>
+
+                {isLoading && (
+                  <div className="absolute inset-0">
+                    <Loader />
+                  </div>
+                )}
               </ul>
             </div>
-          </button>
+          </div>
         </div>
       </div>
     </nav>

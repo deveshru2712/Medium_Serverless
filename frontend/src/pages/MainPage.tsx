@@ -1,16 +1,20 @@
 import { useEffect } from "react";
-import blogStore from "../store/blogStore";
+import { useNavigate } from "react-router-dom";
+
+import blogStore, { FetchType } from "../store/blogStore";
 
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
 import Card from "../components/Card";
 
 const MainPage = () => {
-  const { fetchingBlog, isProcessing, BlogList } = blogStore();
+  const { fetchingBlogList, isProcessing, BlogList } = blogStore();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchingBlog();
-  }, [fetchingBlog]);
+    fetchingBlogList(FetchType.public);
+  }, [fetchingBlogList]);
 
   return (
     <div>
@@ -36,6 +40,7 @@ const MainPage = () => {
                   className="flex flex-col justify-center items-center gap-3 px-4"
                 >
                   <Card
+                    onClick={() => navigate(`/blog/${blog.id}`)}
                     title={blog.title}
                     content={blog.content}
                     author={blog.author}

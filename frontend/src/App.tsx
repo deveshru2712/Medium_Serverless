@@ -10,6 +10,8 @@ import Loader from "./components/Loader";
 import MainPage from "./pages/MainPage";
 import CreateBlogPage from "./pages/CreateBlogPage";
 import UpdateUserPage from "./pages/UpdateUserPage";
+import MyBlogPage from "./pages/MyBlogPage";
+import Blog from "./pages/Blog";
 
 const App = () => {
   const { User, authCheck, isLoading } = authStore();
@@ -25,7 +27,6 @@ const App = () => {
       </div>
     );
   }
-
   return (
     <div className="overflow-hidden">
       <Toaster />
@@ -38,6 +39,16 @@ const App = () => {
         <Route
           path="/update"
           element={User ? <UpdateUserPage /> : <Navigate to={"/login"} />}
+        />
+
+        <Route
+          path="/blogs"
+          element={User ? <MyBlogPage /> : <Navigate to={"/login"} />}
+        />
+
+        <Route
+          path="/blog/:id"
+          element={User ? <Blog /> : <Navigate to={"/login"} />}
         />
 
         <Route
