@@ -80,12 +80,12 @@ const MyBlogPage = () => {
                 <li className="hover:underline">
                   <Link to={"/profileUpdate"}>My profile</Link>
                 </li>
-                <button
+                <div
                   className="cursor-pointer hover:underline"
                   onClick={logOut}
                 >
                   Logout
-                </button>
+                </div>
               </ul>
               {isLoading && (
                 <div className="absolute inset-0">
