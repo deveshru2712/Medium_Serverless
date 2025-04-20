@@ -33,15 +33,20 @@ export const authStore = create<authStoreTypes>((set) => ({
     try {
       const response = await axios.post(`/api/auth/signup`, credentials);
       set({ User: response.data.user, isLoading: false });
-      toast.success(response.data.message);
+      toast.success(response.data.message[0]);
     } catch (error) {
-      console.log(error);
       set({ User: null, isLoading: false });
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Error occurred while creating an account"
-      );
+
+      if (error instanceof Error) {
+        const message = error.response?.data?.message;
+        if (Array.isArray(message)) {
+          message.forEach((err: { message: string }) =>
+            toast.error(err.message)
+          );
+        } else {
+          toast.error(message || "An error occurred while login");
+        }
+      }
     }
   },
   logIn: async (credentials) => {
@@ -53,9 +58,17 @@ export const authStore = create<authStoreTypes>((set) => ({
     } catch (error) {
       console.log(error);
       set({ isLoading: false });
-      toast.error(
-        error instanceof Error ? error.message : "An error occurred while login"
-      );
+
+      if (error instanceof Error) {
+        const message = error.response?.data?.message;
+        if (Array.isArray(message)) {
+          message.forEach((err: { message: string }) =>
+            toast.error(err.message)
+          );
+        } else {
+          toast.error(message || "An error occurred while login");
+        }
+      }
     }
   },
   logOut: async () => {
@@ -67,7 +80,17 @@ export const authStore = create<authStoreTypes>((set) => ({
     } catch (error) {
       console.log(error);
       set({ isLoading: false });
-      toast.error(error instanceof Error ? error.message : "unable to logout");
+
+      if (error instanceof Error) {
+        const message = error.response?.data?.message;
+        if (Array.isArray(message)) {
+          message.forEach((err: { message: string }) =>
+            toast.error(err.message)
+          );
+        } else {
+          toast.error(message || "An error occurred while login");
+        }
+      }
     }
   },
   update: async (credentials) => {
@@ -78,21 +101,24 @@ export const authStore = create<authStoreTypes>((set) => ({
     } catch (error) {
       console.log(error);
       set({ isLoading: false });
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "An error occurred while updating"
-      );
+      if (error instanceof Error) {
+        const message = error.response?.data?.message;
+        if (Array.isArray(message)) {
+          message.forEach((err: { message: string }) =>
+            toast.error(err.message)
+          );
+        } else {
+          toast.error(message || "An error occurred while login");
+        }
+      }
     }
   },
   authCheck: async () => {
     set({ isLoading: true });
     try {
       const response = await axios.get("/api/auth/me");
-      console.log(response.data.user);
       set({ User: response.data.user, isLoading: false });
     } catch (error) {
-      console.log(error);
       set({ User: null, isLoading: false });
     }
   },

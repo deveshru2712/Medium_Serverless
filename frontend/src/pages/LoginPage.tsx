@@ -71,8 +71,8 @@ const LoginPage = () => {
         </div>
         <div className="hidden md:flex flex-1 h-full  justify-center items-center">
           <Quote
-            author="yash chandra"
-            quote="I did'nt do it cause it was easy but i did it cause i thought it was easy."
+            author="Ella Fitzgerald"
+            quote="Just don't give up trying to do what you really want to do. Where there is love and inspiration, I don't think you can go wrong."
           />
         </div>
       </div>

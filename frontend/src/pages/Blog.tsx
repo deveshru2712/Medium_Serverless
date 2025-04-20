@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Loader } from "lucide-react";
 
 import blogStore from "../store/blogStore";
 import Navbar from "../components/Navbar";
 import formatDate from "../utils/DateFormatter";
+import Loader from "../components/Loader";
 
 const Blog = () => {
   const params = useParams();

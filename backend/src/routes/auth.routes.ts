@@ -18,8 +18,6 @@ interface Env {
   DATABASE_URL: string;
   JWT_SECRET: string;
   Cloudinary_Cloud_Name: string;
-  Cloudinary_Api_key: string;
-  Cloudinary_Api_Secret: string;
 }
 
 interface CloudinaryUploadResponse {
@@ -91,7 +89,7 @@ authRouter.post("/signup", async (c) => {
     c.status(400);
     return c.json({
       success: false,
-      message: error.message,
+      message: error.issues.map((issue) => ({ message: issue.message })),
     });
   }
 

@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Bell, Loader, NotebookPen, Search, User } from "lucide-react";
+import { Bell, NotebookPen, Search, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { authStore } from "../store/authStore";
+import Loader from "./Loader";
 
 const Navbar = () => {
   const { logOut, isLoading } = authStore();

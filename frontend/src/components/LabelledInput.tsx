@@ -26,6 +26,7 @@ const LabelledInput = ({
         name={name}
         onChange={onchange}
         placeholder={placeholder}
+        // autoComplete="off"
         className="w-full border-2 px-2 py-1 rounded-md mt-2 outline-none"
       />
     </div>
