@@ -125,9 +125,10 @@ authRouter.post("/signup", async (c) => {
     // setting them up as a cookie
     setCookie(c, "key", token, {
       httpOnly: true,
-      sameSite: "Strict",
-      maxAge: 1 * 24 * 60 * 60,
       secure: true,
+      sameSite: "None",
+      path: "/",
+      maxAge: 1 * 24 * 60 * 60,
     });
 
     c.status(200);
@@ -196,9 +197,9 @@ authRouter.post("/signin", async (c) => {
     setCookie(c, "key", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "lax",
+      sameSite: "None",
       path: "/",
-      maxAge: 60 * 60 * 24 * 1,
+      maxAge: 1 * 24 * 60 * 60,
     });
 
     c.status(200);

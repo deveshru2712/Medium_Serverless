@@ -10,7 +10,12 @@ const app = new Hono();
 app.use(
   "*",
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://medium-serverless-git-master-devesh-chandras-projects.vercel.app",
+      "https://medium-serverless-1yyshy5h2-devesh-chandras-projects.vercel.app",
+      "https://medium-serverless-bay.vercel.app",
+    ],
     credentials: true,
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
