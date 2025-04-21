@@ -12,9 +12,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "https://medium-serverless-ge0d6rdxp-devesh-chandras-projects.vercel.app",
       "https://medium-serverless-git-master-devesh-chandras-projects.vercel.app",
-      "https://medium-serverless-1yyshy5h2-devesh-chandras-projects.vercel.app",
-      "https://medium-serverless-bay.vercel.app",
+      "https://medium-serverless-devesh-chandras-projects.vercel.app",
     ],
     credentials: true,
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
