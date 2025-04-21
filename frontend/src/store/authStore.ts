@@ -21,7 +21,7 @@ interface authStoreTypes {
   signUp: (credentials: SignUpType) => void;
   logIn: (credentials: SignInType) => void;
   logOut: () => void;
-  update: (credentials: UpdateUserType) => void;
+  update: (body: UpdateUserType) => void;
   authCheck: () => void;
 }
 
@@ -31,7 +31,13 @@ export const authStore = create<authStoreTypes>((set) => ({
   signUp: async (credentials) => {
     set({ isLoading: true });
     try {
-      const response = await axios.post(`/api/auth/signup`, credentials);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+        credentials,
+        {
+          withCredentials: true,
+        }
+      );
       set({ User: response.data.user, isLoading: false });
       toast.success(response.data.message[0]);
     } catch (error) {
@@ -44,7 +50,13 @@ export const authStore = create<authStoreTypes>((set) => ({
   logIn: async (credentials) => {
     set({ isLoading: true });
     try {
-      const response = await axios.post(`/api/auth/signin`, credentials);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/signin`,
+        credentials,
+        {
+          withCredentials: true,
+        }
+      );
       set({ User: response.data.user, isLoading: false });
       toast.success(response.data.message);
     } catch (error) {
@@ -56,7 +68,13 @@ export const authStore = create<authStoreTypes>((set) => ({
   logOut: async () => {
     set({ isLoading: true });
     try {
-      const response = await axios.post(`/api/auth/logout`);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       toast.success(response.data.message);
       set({ User: null, isLoading: false });
     } catch (error) {
@@ -65,10 +83,14 @@ export const authStore = create<authStoreTypes>((set) => ({
       toast.error(error instanceof Error ? error.message : "Unable to Logout");
     }
   },
-  update: async (credentials) => {
+  update: async (body) => {
     set({ isLoading: true });
     try {
-      const response = await axios.put(`/api/auth/update`, credentials);
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/auth/update`,
+        body,
+        { withCredentials: true }
+      );
       set({ User: response.data.user, isLoading: false });
     } catch (error) {
       console.log(error);
@@ -83,9 +105,13 @@ export const authStore = create<authStoreTypes>((set) => ({
   authCheck: async () => {
     set({ isLoading: true });
     try {
-      const response = await axios.get("/api/auth/me");
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/auth/me`,
+        { withCredentials: true }
+      );
       set({ User: response.data.user, isLoading: false });
     } catch (error) {
+      console.log(error);
       set({ User: null, isLoading: false });
       toast.error(
         error instanceof Error ? error.message : "Unable to Authenticate"

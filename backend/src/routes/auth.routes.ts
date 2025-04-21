@@ -161,9 +161,11 @@ authRouter.post("/signin", async (c) => {
   const { success, error } = SignInInput.safeParse(body);
   if (!success) {
     c.status(400);
+
     const message = error.issues.map((issue) => ({
       message: issue.message,
     }))[0].message;
+
     return c.json({
       success: false,
       message: message,
@@ -193,9 +195,10 @@ authRouter.post("/signin", async (c) => {
 
     setCookie(c, "key", token, {
       httpOnly: true,
-      sameSite: "strict",
       secure: true,
-      maxAge: 1 * 24 * 60 * 60,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 1,
     });
 
     c.status(200);
@@ -348,6 +351,11 @@ authRouter.post("/logout", async (c) => {
   try {
     setCookie(c, "key", "", {
       maxAge: 0,
+      expires: new Date(0),
+      httpOnly: true,
+      sameSite: "strict",
+      path: "/",
+      secure: true,
     });
 
     c.status(200);

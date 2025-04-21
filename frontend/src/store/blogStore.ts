@@ -37,7 +37,12 @@ const blogStore = create<BlogStoreType>((set) => ({
   fetchingBlogList: async (type) => {
     set({ isProcessing: true });
     try {
-      const response = await axios.get(`/api/blog/${type}`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/blog/${type}`,
+        {
+          withCredentials: true,
+        }
+      );
 
       set({ BlogList: response.data.blog, isProcessing: false });
     } catch (error) {
@@ -50,7 +55,10 @@ const blogStore = create<BlogStoreType>((set) => ({
   fetchBlog: async (id) => {
     set({ isProcessing: true });
     try {
-      const response = await axios.get(`/api/blog/${id}`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/blog/${id}`,
+        { withCredentials: true }
+      );
       set({ isProcessing: false, Blog: response.data.blog });
     } catch (error) {
       set({ Blog: null, isProcessing: false });
@@ -62,7 +70,13 @@ const blogStore = create<BlogStoreType>((set) => ({
   creatingBlog: async (body) => {
     set({ isProcessing: true });
     try {
-      const response = await axios.post(`/api/blog`, body);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/blog`,
+        body,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success(response.data.message);
       set({ isProcessing: false });
     } catch (error) {
@@ -75,7 +89,11 @@ const blogStore = create<BlogStoreType>((set) => ({
   updatingBlog: async (body, id) => {
     set({ isProcessing: true });
     try {
-      const response = await axios.put(`/api/blog/${id}`, body);
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/blog/${id}`,
+        body,
+        { withCredentials: true }
+      );
       toast.success(response.data.message);
       set({ Blog: null, isProcessing: false });
     } catch (error) {
@@ -88,7 +106,10 @@ const blogStore = create<BlogStoreType>((set) => ({
   deletingBlog: async (id) => {
     set({ isProcessing: true });
     try {
-      const response = await axios.delete(`/api/blog/${id}`);
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/blog/${id}`,
+        { withCredentials: true }
+      );
       set((state) => ({
         isProcessing: false,
         BlogList: state.BlogList

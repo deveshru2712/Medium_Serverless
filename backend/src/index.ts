@@ -5,7 +5,18 @@ import blogRoutes from "./routes/blog.routes";
 
 const app = new Hono();
 
-app.use(cors());
+// app.use(cors());
+
+app.use(
+  "*",
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
+  })
+);
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
