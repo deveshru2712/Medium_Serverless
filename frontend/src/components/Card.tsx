@@ -1,6 +1,5 @@
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-
 import { Blog } from "../store/blogStore";
 import formatDate from "../utils/DateFormatter";
 import { useEffect, useState } from "react";
@@ -23,23 +22,31 @@ const Card = ({
     mobile: "",
   });
 
-  const extractor = useEditor({
+  const editor = useEditor({
     extensions: [StarterKit],
     content: content,
     editable: false,
   });
 
   useEffect(() => {
-    if (extractor) {
-      const plainText = extractor.getText();
-      setPlainTextExcerpt({
-        desktop:
-          plainText.slice(0, 300) + (plainText.length > 300 ? " ..." : ""),
-        mobile:
-          plainText.slice(0, 100) + (plainText.length > 100 ? " ..." : ""),
-      });
+    if (editor) {
+      try {
+        const plainText = editor.getText();
+        setPlainTextExcerpt({
+          desktop:
+            plainText.slice(0, 300) + (plainText.length > 300 ? " ..." : ""),
+          mobile:
+            plainText.slice(0, 100) + (plainText.length > 100 ? " ..." : ""),
+        });
+      } catch (error) {
+        console.error("Error extracting text from content:", error);
+        setPlainTextExcerpt({
+          desktop: "Unable to extract preview...",
+          mobile: "Unable to extract preview...",
+        });
+      }
     }
-  }, [extractor, content]);
+  }, [editor, content]);
 
   return (
     <div className="w-full py-5 cursor-pointer" onClick={onClick}>
@@ -48,10 +55,10 @@ const Card = ({
           <div className="flex flex-col justify-center items-start gap-2 md:gap-4">
             <div className="text-xl md:text-4xl font-bold ">{title}</div>
             <div className="hidden md:block text-sm md:text-lg font-segoeu-light text-slate-600">
-              {plainTextExcerpt.desktop}
+              {plainTextExcerpt.desktop || "Loading preview..."}
             </div>
             <div className="block text-normal md:hidden text-slate-500">
-              {plainTextExcerpt.mobile}
+              {plainTextExcerpt.mobile || "Loading preview..."}
             </div>
           </div>
           <div className="flex items-center flex-shrink-0 overflow-hidden">

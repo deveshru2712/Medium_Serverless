@@ -20,28 +20,28 @@ interface EditorProps {
 const Editor = ({ content, onChange, isLoading }: EditorProps) => {
   const [isUploading, setIsUploading] = useState(false);
 
+  const extensions = [
+    StarterKit,
+    Heading.configure({
+      levels: [1, 2, 3],
+    }),
+    Highlight.configure({
+      multicolor: true,
+    }),
+    TextAlign.configure({
+      types: ["heading", "paragraph"],
+      alignments: ["left", "center", "right"],
+      defaultAlignment: "left",
+    }),
+    Image.configure({
+      inline: true,
+      allowBase64: true,
+    }),
+  ];
+
   const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: false,
-      }),
-      Heading.configure({
-        levels: [1, 2, 3],
-      }),
-      Highlight.configure({
-        multicolor: true,
-      }),
-      TextAlign.configure({
-        types: ["heading", "paragraph"],
-        alignments: ["left", "center", "right"],
-        defaultAlignment: "left",
-      }),
-      Image.configure({
-        inline: true,
-        allowBase64: true,
-      }),
-    ],
     content: content,
+    extensions,
     editorProps: {
       attributes: {
         class:
@@ -53,6 +53,7 @@ const Editor = ({ content, onChange, isLoading }: EditorProps) => {
     },
   });
 
+  // make sure that the editor is not editable when we are uploading an image
   const handleUploadStateChange = (uploading: boolean) => {
     setIsUploading(uploading);
     if (editor) {

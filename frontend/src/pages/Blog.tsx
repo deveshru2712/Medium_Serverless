@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import TipTapParser from "tiptap-parser";
 
 import blogStore from "../store/blogStore";
 import Navbar from "../components/Navbar";
@@ -20,18 +19,6 @@ const Blog = () => {
     }
   }, [fetchBlog, blogId]);
 
-  const extractor = useEditor({
-    extensions: [StarterKit],
-    content: Blog?.content,
-    editable: false,
-  });
-
-  useEffect(() => {
-    if (extractor && Blog?.content) {
-      extractor.commands.setContent(Blog.content);
-    }
-  }, [extractor, Blog]);
-
   return (
     <div>
       {isProcessing ? (
@@ -49,11 +36,13 @@ const Blog = () => {
               <Navbar />
               <div className="container max-w-6xl mx-auto my-5 flex flex-col justify-center items-center gap-5">
                 <div className="flex flex-col justify-center items-center gap-5">
-                  <h1 className="text-4xl font-bold">{Blog.title}</h1>
+                  <h1 className="text-2xl md:text-4xl font-bold text-center">
+                    {Blog.title}
+                  </h1>
                   <img
                     src={Blog.titleImg}
                     alt="Title image"
-                    className="w-2/3 object-contain rounded-sm"
+                    className="w-2/3 max-h-[300px] object-contain rounded-sm"
                   />
                 </div>
                 <div className="w-4/5 md:w-1/2 mx-auto flex justify-between items-center gap-4">
@@ -74,8 +63,25 @@ const Blog = () => {
                     </span>
                   </div>
                 </div>
-                <div className="w-full md:w-4/5 px-4 text-lg font-normal font-segoeu-light flex justify-center items-center gap-2">
-                  {extractor && <EditorContent editor={extractor} />}
+                <div className="w-full px-4 text-lg font-normal flex justify-center items-center gap-2">
+                  <div className="w-full h-full">
+                    <TipTapParser
+                      content={Blog.content}
+                      language="tsx"
+                      containerClassName="tiptap"
+                      classNames={{
+                        h1ClassName: "text-3xl font-bold mb-4",
+                        h2ClassName: "text-2xl font-bold mb-3",
+                        h3ClassName: "text-xl font-bold mb-2",
+
+                        pClassName: "mb-4",
+                        divClassName: "my-2",
+                        aClassName: "text-blue-600 underline",
+
+                        codeClassName: "font-mono text-sm",
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </>

@@ -35,15 +35,12 @@ const DialogPage = ({ workType }: DialogPageProps) => {
 
   const navigate = useNavigate();
 
-  // Use useEffect to handle fetching blog data for update mode
   useEffect(() => {
     if (workType === WorkType.UPDATE && blogId) {
-      // Fetch the blog only once when component mounts
       fetchBlog(blogId);
     }
   }, [workType, blogId, fetchBlog]);
 
-  // Use another useEffect to update form fields when Blog data changes
   useEffect(() => {
     if (workType === WorkType.UPDATE && Blog) {
       setTitle(Blog.title || "");
@@ -54,6 +51,7 @@ const DialogPage = ({ workType }: DialogPageProps) => {
     }
   }, [Blog, workType]);
 
+  // fnc will work when changes are made to the blog content
   const onChangeHandler = (content: string) => {
     setBlog(content);
   };
@@ -81,12 +79,14 @@ const DialogPage = ({ workType }: DialogPageProps) => {
     navigate("/", { replace: false });
   };
 
+  // this fnc will call the input field for changing the image
   const onButtonClick = () => {
     if (InputRef.current) {
       InputRef.current.click();
     }
   };
 
+  // fnc will handle file upload
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {

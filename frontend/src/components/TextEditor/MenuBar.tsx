@@ -38,6 +38,7 @@ const MenuBar = ({ editor, isUploading, setIsUploading }: MenuBarProps) => {
     }
   };
 
+  // fnc will upload image
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
