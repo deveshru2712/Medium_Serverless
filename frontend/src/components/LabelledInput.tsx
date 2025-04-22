@@ -16,8 +16,8 @@ const LabelledInput = ({
   onchange,
 }: LabelledInputProps) => {
   return (
-    <div className="w-full">
-      <label htmlFor={label} className="text-xl font-semibold ">
+    <div className="w-full mt-3">
+      <label htmlFor={label} className="text-lg text-slate-500 font-medium">
         {label}
       </label>
       <input
@@ -26,8 +26,7 @@ const LabelledInput = ({
         name={name}
         onChange={onchange}
         placeholder={placeholder}
-        // autoComplete="off"
-        className="w-full border-2 px-2 py-1 rounded-md mt-2 outline-none"
+        className="w-full bg-active border-2 px-2 py-1 rounded-md mt-1 outline-none"
       />
     </div>
   );

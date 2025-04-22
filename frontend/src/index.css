@@ -1,16 +1,11 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "segoeu-light";
-  src: url("./assets/fonts/segoeuithis.ttf");
-}
-
-@font-face {
-  font-family: "segoeu-heavy";
-  src: url("./assets/fonts/segoeuithibd.ttf");
+:root {
+  --font-sans: "Bricolage Grotesque", sans-serif;
 }
 
 @theme {
-  --font-segoeu-light: "segoeu-light";
-  --font-segoeu-heavy: "segoeu-heavy";
+  --color-main: #fffefc;
+  --color-active: #f7f8f2;
+  --color-danger: #be746e;
 }

@@ -72,6 +72,7 @@ const UpdateUserPage = () => {
               hidden
               id="image_Updater"
               accept="image/*"
+              className="bg-active"
               ref={imageRef}
               onChange={handleImageChange}
             />
@@ -98,7 +99,7 @@ const UpdateUserPage = () => {
                 placeholder="Username"
                 value={form.name}
                 onChange={onchangeHandler}
-                className="border outline-none px-2 py-1 rounded-sm text-lg "
+                className="border bg-active outline-none px-2 py-1 rounded-sm text-lg "
               />
             </div>
 
@@ -113,7 +114,7 @@ const UpdateUserPage = () => {
                 placeholder="you@mail.com"
                 value={form.email}
                 onChange={onchangeHandler}
-                className="border outline-none px-2 py-1 rounded-sm text-lg "
+                className="border bg-active outline-none px-2 py-1 rounded-sm text-lg "
               />
             </div>
 
@@ -128,7 +129,7 @@ const UpdateUserPage = () => {
                 placeholder="......"
                 value={form.password}
                 onChange={onchangeHandler}
-                className="border outline-none px-2 py-1 rounded-sm text-lg "
+                className="border bg-active outline-none px-2 py-1 rounded-sm text-lg "
               />
             </div>
 
@@ -142,7 +143,7 @@ const UpdateUserPage = () => {
                 value={form.bio}
                 placeholder="Enter your bio"
                 onChange={onchangeHandler}
-                className="border outline-none px-2 py-1 rounded-sm text-lg "
+                className="border bg-active outline-none px-2 py-1 rounded-sm text-lg "
               ></textarea>
             </div>
 

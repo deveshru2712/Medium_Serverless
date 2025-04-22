@@ -44,7 +44,8 @@ const Editor = ({ content, onChange, isLoading }: EditorProps) => {
     content: content,
     editorProps: {
       attributes: {
-        class: "min-h-[156px] border rounded-md outline-none px-3 py-2 tiptap",
+        class:
+          "min-h-[156px] border bg-active rounded-md outline-none px-3 py-2 tiptap",
       },
     },
     onUpdate: ({ editor }) => {

@@ -46,28 +46,26 @@ const Card = ({
       <div>
         <div className="flex justify-between items-center gap-4">
           <div className="flex flex-col justify-center items-start gap-2 md:gap-4">
-            <div className="text-xl md:text-3xl font-semibold font-segoeu-heavy">
-              {title}
-            </div>
+            <div className="text-xl md:text-4xl font-bold ">{title}</div>
             <div className="hidden md:block text-sm md:text-lg font-segoeu-light text-slate-600">
               {plainTextExcerpt.desktop}
             </div>
-            <div className="block text-sm md:hidden font-segoeu-light text-slate-600">
+            <div className="block text-normal md:hidden text-slate-500">
               {plainTextExcerpt.mobile}
             </div>
           </div>
-          <div className="size-16 md:h-56 md:w-56 flex items-center flex-shrink-0 overflow-hidden">
+          <div className="flex items-center flex-shrink-0 overflow-hidden">
             <img
               src={titleImg}
               alt="title"
-              className="object-cover rounded-sm hover:cursor-pointer"
+              className="size-16 md:size-40 object-contain rounded-sm hover:cursor-pointer"
             />
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <div className="text-lg">
+        <div className="mt-4 flex justify-between items-center">
+          <div>
             Created By
-            <span className="text-lg font-semibold pl-1">{author.name}</span>
+            <span className="text-lg font-medium pl-1">{author.name}</span>
           </div>
           <div>{formatDate(createdAt)}</div>
         </div>

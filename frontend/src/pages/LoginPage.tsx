@@ -1,11 +1,8 @@
 import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
-
-import { SignInType } from "@deveshru2712/medium_common";
-
 import LabelledInput from "../components/LabelledInput";
-import Quote from "../components/Quote";
 import { authStore } from "../store/authStore";
+import { SignInType } from "@deveshru2712/medium_common";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [form, setForm] = useState<SignInType>({
@@ -22,60 +19,67 @@ const LoginPage = () => {
   const onSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
+    console.log(form);
     logIn(form);
   };
 
   return (
-    <div className="bg-slate-200">
-      <div className="w-screen h-screen flex flex-col md:flex-row">
-        <div className="flex flex-1 py-10 bg-white justify-center items-center">
-          <div className="flex flex-col justify-center items-center gap-4">
-            <h2 className="text-4xl font-semibold">
-              Login to start writing ✍️
-            </h2>
-            <span className="text-lg font-semibold text-slate-500">
-              Don't have an account?
-              <Link to={"/signup"} className="pl-2 underline">
-                signup
-              </Link>
-            </span>
+    <div className="h-screen flex flex-col bg-main">
+      <nav className="shadow-md p-4">
+        <div className="container max-w-6xl mx-auto">
+          <span className="text-2xl font-semibold">StoryScape</span>
+        </div>
+      </nav>
 
-            <form
-              onSubmit={onSubmitHandler}
-              className="w-full flex flex-col justify-center items-center gap-2"
-            >
-              <LabelledInput
-                label="Email"
-                name="email"
-                type="email"
-                onchange={onChangeHandler}
-                placeholder="your@mail.com"
-              />
+      <main className="h-[calc(100vh-64px)] flex items-center  justify-center">
+        <div className="container max-w-6xl mx-auto">
+          <div className="flex flex-col justify-center items-center">
+            <div>
+              <h1 className="text-4xl font-bold">Log in</h1>
+            </div>
+            <div>
+              <form onSubmit={onSubmitHandler}>
+                <LabelledInput
+                  label="Email"
+                  name="email"
+                  type="email"
+                  onchange={onChangeHandler}
+                  placeholder="your@mail.com"
+                />
 
-              <LabelledInput
-                label="password"
-                type="password"
-                name="password"
-                onchange={onChangeHandler}
-                placeholder="......"
-              />
+                <LabelledInput
+                  label="Password"
+                  type="password"
+                  name="password"
+                  onchange={onChangeHandler}
+                  placeholder="......"
+                />
 
-              <button
-                type="submit"
-                className="w-full py-2 bg-black  text-lg font-semibold text-white rounded-md cursor-pointer active:scale-105 duration-300"
-              >
-                Sign In
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="w-full border border-slate-600 text-lg cursor-pointer font-semibold mt-4 py-1 bg-white text-black rounded"
+                >
+                  Log in
+                </button>
+              </form>
+              <div className="text-lg text-center mt-2">
+                Don't have an account?
+                <Link
+                  to={"/signup"}
+                  className="text-danger ml-1 hover:underline"
+                >
+                  Signup
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="hidden md:flex flex-1 h-full  justify-center items-center">
-          <Quote
-            author="Ella Fitzgerald"
-            quote="Just don't give up trying to do what you really want to do. Where there is love and inspiration, I don't think you can go wrong."
-          />
-        </div>
-      </div>
+      </main>
+
+      <footer className="w-full md:w-1/2 mx-auto mb-2 text-center text-slate-500 font-normal">
+        © 2025 StoryScape. Empowering your creativity with interactive
+        storytelling and seamless note-taking. All rights reserved.
+      </footer>
     </div>
   );
 };

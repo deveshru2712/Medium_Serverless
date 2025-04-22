@@ -3,8 +3,8 @@ const formatDate = (dataString: Date) => {
     year: "numeric",
     month: "short",
     day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
+    // hour: "numeric",
+    // minute: "numeric",
   });
 };
 

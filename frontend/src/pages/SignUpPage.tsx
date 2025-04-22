@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import { SignUpType } from "@deveshru2712/medium_common";
 
-import Quote from "../components/Quote";
 import LabelledInput from "../components/LabelledInput";
 import { authStore } from "../store/authStore";
 
@@ -22,68 +21,74 @@ const SignUpPage = () => {
 
   const onSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-
     signUp(form);
   };
+
   return (
-    <div className="bg-slate-200">
-      <div className="w-screen h-screen flex flex-col md:flex-row">
-        <div className="flex flex-1 py-10 bg-white justify-center items-center">
-          <div className="flex flex-col justify-center items-center gap-4">
-            <h2 className="text-3xl font-semibold">
-              Sign Up to start writing ✍️
-            </h2>
-            <span className="text-lg font-semibold text-slate-500">
-              Already have an account?
-              <Link to={"/login"} className="pl-2 underline">
-                login
-              </Link>
-            </span>
+    <div className="h-screen flex flex-col bg-main">
+      <nav className="shadow p-4">
+        <div className="container max-w-6xl mx-auto text-2xl font-semibold">
+          StoryScape
+        </div>
+      </nav>
 
-            <form
-              onSubmit={onSubmitHandler}
-              className="w-full flex flex-col justify-center items-center gap-2"
-            >
-              <LabelledInput
-                label="Username"
-                name="name"
-                type="text"
-                onchange={onChangeHandler}
-                placeholder="Enter your username"
-              />
+      <main className="h-[calc(100vh-64px)] flex items-center  justify-center">
+        <div className="container max-w-6xl mx-auto">
+          <div className="flex flex-col justify-center items-center">
+            <div>
+              <h1 className="text-4xl font-bold">Sign up</h1>
+            </div>
+            <div>
+              <form onSubmit={onSubmitHandler}>
+                <LabelledInput
+                  label="Username"
+                  name="name"
+                  type="text"
+                  onchange={onChangeHandler}
+                  placeholder="Enter your username"
+                />
 
-              <LabelledInput
-                label="Email"
-                type="email"
-                name="email"
-                onchange={onChangeHandler}
-                placeholder="your@mail.com"
-              />
+                <LabelledInput
+                  label="Email"
+                  name="email"
+                  type="email"
+                  onchange={onChangeHandler}
+                  placeholder="your@mail.com"
+                />
 
-              <LabelledInput
-                label="password"
-                type="password"
-                name="password"
-                onchange={onChangeHandler}
-                placeholder="......"
-              />
+                <LabelledInput
+                  label="Password"
+                  type="password"
+                  name="password"
+                  onchange={onChangeHandler}
+                  placeholder="......"
+                />
 
-              <button
-                type="submit"
-                className="w-full py-2 bg-black text-lg font-semibold text-white rounded-md cursor-pointer active:scale-105 duration-300"
-              >
-                Sign Up
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="w-full border border-slate-600 text-lg cursor-pointer font-semibold mt-4 py-1 bg-white text-black rounded"
+                >
+                  Log in
+                </button>
+              </form>
+              <div className="text-lg text-center mt-2">
+                Already have an account?
+                <Link
+                  to={"/login"}
+                  className="text-danger ml-1 hover:underline"
+                >
+                  Login
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="hidden md:flex flex-1 h-full  justify-center items-center">
-          <Quote
-            author="yash chandra"
-            quote="I did'nt do it cause it was easy but i did it cause i thought it was easy."
-          />
-        </div>
-      </div>
+      </main>
+
+      <footer className="w-full md:w-1/2 mx-auto mb-2 text-center text-slate-500 font-normal">
+        © 2025 StoryScape. Empowering your creativity with interactive
+        storytelling and seamless note-taking. All rights reserved.
+      </footer>
     </div>
   );
 };

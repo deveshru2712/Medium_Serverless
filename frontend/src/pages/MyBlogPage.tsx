@@ -53,11 +53,11 @@ const MyBlogPage = () => {
 
   return (
     <div>
-      <div className="border-b-2 shadow-md">
-        <div className="max-w-6xl mx-auto w-full px-4 py-4 flex justify-between items-center">
+      <div className="bg-main border-b-2 shadow-md">
+        <div className="container max-w-6xl mx-auto w-full px-4 py-4 flex justify-between items-center">
           <div className="flex flex-col justify-center items-start text-left">
-            <h1 className=" text-2xl font-semibold font-segoeu-heavy">
-              {User?.name}
+            <h1 className=" text-2xl font-semibold ">
+              {User?.name.toUpperCase()}
             </h1>
           </div>
 
@@ -123,7 +123,7 @@ const MyBlogPage = () => {
                     titleImg={blog.titleImg}
                     createdAt={blog.createdAt}
                   />
-                  <div className="bg-slate-200 rounded-md  w-full py-1 px-2 flex items-center justify-end gap-3">
+                  <div className="bg-slate-200/10 rounded-md  w-full py-1 px-2 flex items-center justify-end gap-3">
                     <button
                       className=" flex justify-center items-center border gap-2 active:scale-105 duration-200 border-white rounded-md px-2 cursor-pointer py-1 text-lg font-semibold "
                       onClick={() => navigate(`/updateBlog/${blog.id}`)}

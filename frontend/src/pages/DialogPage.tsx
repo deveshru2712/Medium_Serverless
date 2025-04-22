@@ -147,8 +147,8 @@ const DialogPage = ({ workType }: DialogPageProps) => {
           <Loader />
         </div>
       ) : (
-        <div className="max-w-6xl mx-auto my-10 px-5 md:px-10">
-          <div className="w-full border px-4 py-2 rounded-md relative">
+        <div className="bg-main container max-w-6xl mx-auto my-10 px-5 md:px-10">
+          <div className="bg-active w-full border px-4 py-2 rounded-md relative">
             <input
               ref={InputRef}
               type="file"
@@ -168,13 +168,13 @@ const DialogPage = ({ workType }: DialogPageProps) => {
 
                 <button
                   onClick={onButtonClick}
-                  className="absolute top-2 right-2 bg-white/50 p-1 rounded-full hover:bg-white/70 cursor-pointer"
+                  className="absolute -top-1 left-1/2 translate-x-20  bg-white/50 p-1 rounded-full hover:bg-white/70 cursor-pointer"
                 >
                   <Pencil fill="#eeeee4" />
                 </button>
               </>
             ) : (
-              <div>
+              <div className="bg-active">
                 <span
                   onClick={onButtonClick}
                   className="w-full h-full cursor-pointer flex flex-col justify-center items-center"
@@ -201,7 +201,7 @@ const DialogPage = ({ workType }: DialogPageProps) => {
               placeholder="Enter title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="text-3xl md:text-6xl w-full outline-none text-slate-800"
+              className="bg-active mt-6 text-3xl md:text-6xl w-full outline-none text-slate-800"
             />
           </form>
           <Tiptap
