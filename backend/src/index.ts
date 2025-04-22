@@ -12,7 +12,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://medium-serverless-ge0d6rdxp-devesh-chandras-projects.vercel.app",
+      "https://medium-serverless-ao8jacpk5-devesh-chandras-projects.vercel.app",
       "https://medium-serverless-git-master-devesh-chandras-projects.vercel.app",
       "https://medium-serverless-devesh-chandras-projects.vercel.app",
     ],
